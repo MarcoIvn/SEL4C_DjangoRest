@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-
+import os 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -36,6 +36,7 @@ REST_FRAMEWORK = {
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -131,3 +132,17 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'sel4c.Admin'
+
+# Configuración de rutas estáticas
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'bootstrap')] 
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # Ruta a tus archivos estáticos personalizados
+
+# Ruta donde se recopilarán los archivos estáticos para producción
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
+
+JAZZMIN_SETTINGS = {
+  'site_header': "SEL4C Administrator",
+  "site_brand" : "SEL4C Administrator",
+  "copyright": "SEL4C.com"
+}

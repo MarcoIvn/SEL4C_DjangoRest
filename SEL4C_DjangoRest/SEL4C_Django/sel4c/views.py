@@ -3,25 +3,43 @@ from rest_framework import viewsets
 from rest_framework import permissions
 import SEL4C_Django.sel4c.models as models
 import SEL4C_Django.sel4c.serializers as serializers
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.views import View
 
-
-""" class UserViewSet(viewsets.ModelViewSet):
+class HomeView(View):
+  def get(self,request):
+    entrepreneurs = models.Entrepreneur.objects.all()  # Recupera todos los objetos Entrepreneur
+    context = {'entrepreneurs': entrepreneurs}
+    if request.user.is_authenticated:
+      return render(request, "sel4c/index.html", context)
+    else:
+      messages.success(request, ("Necesita Iniciar Sesión"))
+      return redirect('login')
     
-    API endpoint that allows users to be viewed or edited.
+  
+class LoginView(View):
+  def get(self, request):
+    if request.user.is_authenticated:
+      return redirect('home')
+    return render(request, 'authentication/login.html', {})
+
+  def post(self, request):
+    username = request.POST["username"]
+    password = request.POST["password"]
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+      login(request, user)
+      return redirect('home')
+    else:
+      messages.success(request, ("Nombre de usuario o contraseña incorrectos, Intentelo de nuevo"))
+      return redirect('login')
     
-    permission_classes = [permissions.IsAuthenticated]
-    queryset = User.objects.all().order_by('-date_joined')
-    serializer_class = serializers.UserSerializer
-
-
-class GroupViewSet(viewsets.ModelViewSet):
- 
-    API endpoint that allows groups to be viewed or edited.
-
-    permission_classes = [permissions.IsAuthenticated]
-    queryset = Group.objects.all()
-    serializer_class = serializers.GroupSerializer
- """
+def logoutView(request):
+  logout(request)
+  messages.success(request, ("Sesión Cerrada Correctamente, bye!!!"))
+  return redirect('login')
 
 class AdminViewSet(viewsets.ModelViewSet):
     """
