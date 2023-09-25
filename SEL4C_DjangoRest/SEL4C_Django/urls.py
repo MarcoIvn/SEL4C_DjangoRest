@@ -12,10 +12,10 @@ router.register(r'groups', views.GroupViewSet) """
 
 router.register(r'admins', views.AdminViewSet)
 router.register(r'users', views.EntrepreneurViewSet)
-router.register(r'activity', views.ActivityViewSet)
-router.register(r'file', views.FileViewSet)
-router.register(r'question', views.QuestionViewSet)
-router.register(r'answer', views.AnswerViewSet)
+router.register(r'activities', views.ActivityViewSet)
+router.register(r'files', views.FileViewSet)
+router.register(r'questions', views.QuestionViewSet)
+router.register(r'answers', views.AnswerViewSet)
 
 
 urlpatterns = [
