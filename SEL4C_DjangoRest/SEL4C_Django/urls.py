@@ -6,6 +6,8 @@ from drf_spectacular.views import SpectacularAPIView
 from drf_spectacular.views import SpectacularRedocView, SpectacularSwaggerView
 from drf_spectacular.views import SpectacularAPIView
 
+
+
 router = routers.DefaultRouter()
 """ router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet) """
@@ -19,7 +21,7 @@ router.register(r'answers', views.AnswerViewSet)
 
 
 urlpatterns = [
-  path('', include(router.urls)),
+  path('api-root', include(router.urls)),
   path('api-auth/', include('rest_framework.urls', namespace= 'rest_framework')),
   path("admin/", admin.site.urls),
   
@@ -29,4 +31,9 @@ urlpatterns = [
   path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
   # Redoc UI:
   path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+
+  path("home/",views.HomeView.as_view(), name= "home"),
+  #path('', include('django.contrib.auth.urls')),
+  path('',views.LoginView.as_view(), name= "login"),
+  path('logout', views.logoutView, name = "logout"),
 ]
