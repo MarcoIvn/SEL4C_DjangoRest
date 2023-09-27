@@ -31,7 +31,7 @@ class EntrepreneurSerializer(serializers.HyperlinkedModelSerializer):
 class ActivitySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Activity
-        fields = ['id', 'activity_num', 'username', 'title', 'description']
+        fields = ['id', 'activity_num', 'title', 'description']
 
 
 class FileSerializer(serializers.HyperlinkedModelSerializer):
@@ -49,4 +49,4 @@ class QuestionSerializer(serializers.HyperlinkedModelSerializer):
 class AnswerSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Answer
-        fields = ['id','question_id', 'number', 'text']
+        fields = ['id','question_id', 'number', 'text','username']

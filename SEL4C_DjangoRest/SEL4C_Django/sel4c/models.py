@@ -39,12 +39,11 @@ class Entrepreneur(models.Model):
 
 class Activity(models.Model):
     activity_num = models.IntegerField()
-    username = models.ForeignKey(Entrepreneur, on_delete=models.CASCADE)
     title = models.TextField()
     description = models.TextField()
 
     def __str__(self) -> str:
-        return f"{self.activity_num} ({self.username})"
+        return f"{self.activity_num}"
     class Meta:
         app_label = 'sel4c'
 
@@ -74,7 +73,8 @@ class Answer(models.Model):
     question_id = models.ForeignKey(Question, on_delete=models.CASCADE)
     number = models.IntegerField(default=0)
     text = models.TextField(default="N/A")
-    
+    username = models.ForeignKey(Entrepreneur, on_delete=models.CASCADE, default= "")
+
     def __str__(self) -> str:
         return f"{self.question_id}.{self.id}"
     class Meta:
