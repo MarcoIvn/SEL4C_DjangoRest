@@ -8,7 +8,7 @@
   <div class="row">   
       <div class="col-xl-3 col-md-6">
           <div class="card bg-primary text-white mb-4">
-              <div class="card-body">Primary Card</div>
+              <div class="card-body">Usuarios creados: {{entrepreneurs.count}}</div>
               <div class="card-footer d-flex align-items-center justify-content-between">
                   <a class="small text-white stretched-link" href="#">View Details</a>
                   <div class="small text-white"><i class="fas fa-angle-right"></i></div>
@@ -48,7 +48,7 @@
           <div class="card mb-4">
               <div class="card-header">
                   <i class="fas fa-chart-area me-1"></i>
-                  Area Chart Example
+                  Grafica de
               </div>
               <div class="card-body"><canvas id="myAreaChart" width="100%" height="40" data-labels="{{activity_labels}}" data-data="{{activity_deliveries}}"></canvas></div>
           </div>
@@ -57,9 +57,9 @@
           <div class="card mb-4">
               <div class="card-header">
                   <i class="fas fa-chart-bar me-1"></i>
-                  Bar Chart Example
+                  Grafica de Actividades
               </div>
-              <div class="card-body"><canvas id="myBarChart" width="100%" height="40" ></canvas></div>
+              <div class="card-body"><canvas id="myBarChart" width="100%" height="40" data-labels="{{activity_labels}}" data-data="{{activity_deliveries}}"></canvas></div>
           </div>
       </div>
   </div>
@@ -96,8 +96,8 @@
               </tfoot>
               <tbody>
                 {% for entrepreneur in entrepreneurs %}
-                <tr>
-                    <td>{{ entrepreneur.first_name }}</td>
+                  <tr>
+                    <td> <a href="{% url 'user_page' entrepreneur.id %}"> {{ entrepreneur.first_name }} </a></td>
                     <td>{{ entrepreneur.last_name }}</td>
                     <td>{{ entrepreneur.degree }}</td>
                     <td>{{ entrepreneur.institution }}</td>
@@ -105,7 +105,7 @@
                     <td>{{ entrepreneur.age }}</td>
                     <td>{{ entrepreneur.country }}</td>
                     <td>{{ entrepreneur.studyField }}</td>
-                </tr>
+                  </tr>
                 {% endfor %}
               </tbody>
           </table>

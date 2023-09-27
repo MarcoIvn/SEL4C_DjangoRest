@@ -4,22 +4,26 @@ Chart.defaults.global.defaultFontColor = '#292b2c';
 
 // Bar Chart Example
 var ctx = document.getElementById("myBarChart");
+var activity_labels = ctx.getAttribute("data-labels");
+var activity_deliveries = ctx.getAttribute("data-data")
+activity_labels = JSON.parse(activity_labels);
+activity_deliveries = JSON.parse(activity_deliveries);
 var myLineChart = new Chart(ctx, {
   type: 'bar',
   data: {
-    labels: ["January", "February", "March", "April", "May", "June"],
+    labels: activity_labels,
     datasets: [{
-      label: "Revenue",
-      backgroundColor: "rgba(2,117,216,1)",
-      borderColor: "rgba(2,117,216,1)",
-      data: [4215, 5312, 6251, 7841, 9821, 14984],
+      label: "Entregables",
+      backgroundColor: "rgba(90,34,139,1)",
+      borderColor:  "rgba(90,34,139,1)",
+      data: activity_deliveries
     }],
   },
   options: {
     scales: {
       xAxes: [{
         time: {
-          unit: 'month'
+          unit: 'actividad'
         },
         gridLines: {
           display: false
@@ -31,7 +35,7 @@ var myLineChart = new Chart(ctx, {
       yAxes: [{
         ticks: {
           min: 0,
-          max: 15000,
+          max: 500,
           maxTicksLimit: 5
         },
         gridLines: {
