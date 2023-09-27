@@ -4,18 +4,6 @@ from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 
 
-""" class UserSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = User
-        fields = ['url', 'username', 'email', 'groups']
-
-
-class GroupSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Group
-        fields = ['url', 'name']
- """
-
 class AdminSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Admin
@@ -35,18 +23,21 @@ class ActivitySerializer(serializers.HyperlinkedModelSerializer):
 
 
 class FileSerializer(serializers.HyperlinkedModelSerializer):
+    activity_id = serializers.PrimaryKeyRelatedField(queryset=models.Activity.objects.all())
     class Meta:
         model = models.File
         fields = ['id', 'activity_id', 'file', 'filetype']
 
 
 class QuestionSerializer(serializers.HyperlinkedModelSerializer):
+    activity_id = serializers.PrimaryKeyRelatedField(queryset=models.Activity.objects.all())
     class Meta:
         model = models.Question
         fields = ['id', 'activity_id', 'description']
 
 
 class AnswerSerializer(serializers.HyperlinkedModelSerializer):
+    question_id = serializers.PrimaryKeyRelatedField(queryset=models.Question.objects.all())
     class Meta:
         model = models.Answer
         fields = ['id','question_id', 'number', 'text','username']

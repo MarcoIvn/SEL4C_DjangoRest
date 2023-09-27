@@ -1,6 +1,10 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
 from rest_framework import permissions
+from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+from rest_framework.decorators import api_view
+from rest_framework import status
 import SEL4C_Django.sel4c.models as models
 import SEL4C_Django.sel4c.serializers as serializers
 from django.contrib.auth import authenticate, login, logout
@@ -41,6 +45,20 @@ def logoutView(request):
   messages.success(request, ("Sesión Cerrada Correctamente, bye!!!"))
   return redirect('login')
 
+
+@api_view(['POST'])
+def obtain_auth_token(request):
+    username = request.data.get('username')
+    password = request.data.get('password')
+
+    user = authenticate(request, username=username, password=password)
+    
+    if user:
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({'token': token.key})
+    else:
+        return Response({'error': 'Credenciales incorrectas'}, status=status.HTTP_400_BAD_REQUEST)
+
 class AdminViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Usuarios to be viewed or edited.
@@ -48,6 +66,9 @@ class AdminViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = models.Admin.objects.all()
     serializer_class = serializers.AdminSerializer
+    def get_paginated_response(self, data):
+      return Response(data)
+
 
 class EntrepreneurViewSet(viewsets.ModelViewSet):
     """
@@ -56,6 +77,9 @@ class EntrepreneurViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = models.Entrepreneur.objects.all()
     serializer_class = serializers.EntrepreneurSerializer
+    def get_paginated_response(self, data):
+      return Response(data)
+
 
 
 class ActivityViewSet(viewsets.ModelViewSet):
@@ -65,6 +89,9 @@ class ActivityViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = models.Activity.objects.all()
     serializer_class = serializers.ActivitySerializer
+    def get_paginated_response(self, data):
+      return Response(data)
+
 
 
 class FileViewSet(viewsets.ModelViewSet):
@@ -74,6 +101,9 @@ class FileViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = models.File.objects.all()
     serializer_class = serializers.FileSerializer
+    def get_paginated_response(self, data):
+      return Response(data)
+
 
 
 class QuestionViewSet(viewsets.ModelViewSet):
@@ -83,6 +113,8 @@ class QuestionViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = models.Question.objects.all()
     serializer_class = serializers.QuestionSerializer
+    def get_paginated_response(self, data):
+      return Response(data)
 
 
 class AnswerViewSet(viewsets.ModelViewSet):
@@ -92,3 +124,5 @@ class AnswerViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = models.Answer.objects.all()
     serializer_class = serializers.AnswerSerializer
+    def get_paginated_response(self, data):
+      return Response(data)

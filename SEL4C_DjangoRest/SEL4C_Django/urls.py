@@ -25,6 +25,7 @@ urlpatterns = [
   path('api-auth/', include('rest_framework.urls', namespace= 'rest_framework')),
   path("admin/", admin.site.urls),
   
+  path('api-token-auth/', views.obtain_auth_token, name='api_token_auth'),
   #OpenApi
   path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
   # Swagger UI:
