@@ -13,6 +13,7 @@ class HomeView(View):
   def get(self,request):
     entrepreneurs = models.Entrepreneur.objects.all()  
     activities = models.Activity.objects.all()
+
     #activity_labels = [f"Actividad {activity.activity_num}" for activity in activities]
     activity_labels = []
     activity_deliveries = []
@@ -24,12 +25,24 @@ class HomeView(View):
       'activity_labels': json.dumps(activity_labels),
       'activity_deliveries': json.dumps(activity_deliveries)
     }
+    print(context)
     if request.user.is_authenticated:
-      print(context)
       return render(request, "sel4c/index.html", context)
     else:
       messages.success(request, ("Necesita Iniciar Sesión"))
       return redirect('login')
+
+class EntrepreneurView(View):
+  def get(self, request, id):
+    entrepreneur = models.Entrepreneur.objects.filter(id = id)
+    context = {
+      'entrepreneur': entrepreneur
+    }
+    print(context)
+    if request.user.is_authenticated and entrepreneur.exists:
+      return render(request, "sel4c/entrepreneur/show.html", context)
+    else:
+      return render(request, "sel4c/index.html")
     
   
 class LoginView(View):
