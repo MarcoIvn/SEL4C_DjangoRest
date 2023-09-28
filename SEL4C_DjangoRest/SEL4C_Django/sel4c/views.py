@@ -67,13 +67,13 @@ def logoutView(request):
   messages.success(request, ("Sesión Cerrada Correctamente, bye!!!"))
   return redirect('login')
 
-class AdminViewSet(viewsets.ModelViewSet):
+class UsuarioViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Usuarios to be viewed or edited.
     """
     permission_classes = [permissions.IsAuthenticated]
-    queryset = models.Admin.objects.all()
-    serializer_class = serializers.AdminSerializer
+    queryset = models.Usuario.objects.all()
+    serializer_class = serializers.UsuarioSerializer
 
 class EntrepreneurViewSet(viewsets.ModelViewSet):
     """
