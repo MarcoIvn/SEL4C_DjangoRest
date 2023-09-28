@@ -21,7 +21,7 @@ router.register(r'answers', views.AnswerViewSet)
 
 
 urlpatterns = [
-  path('api-root', include(router.urls)),
+  path('api-root/', include(router.urls)),
   path('api-auth/', include('rest_framework.urls', namespace= 'rest_framework')),
   path("admin/", admin.site.urls),
   
@@ -37,4 +37,6 @@ urlpatterns = [
   #path('', include('django.contrib.auth.urls')),
   path('',views.LoginView.as_view(), name= "login"),
   path('logout', views.logoutView, name = "logout"),
+
+  path('register/', views.registerUser, name='register'),
 ]

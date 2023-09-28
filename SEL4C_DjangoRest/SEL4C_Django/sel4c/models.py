@@ -4,7 +4,8 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
 class User(AbstractUser):
-  is_admin = models.BooleanField(default=False)
+
+  is_entrepreneur = models.BooleanField(default=False)
 
   def __str__(self):
       return self.username 
@@ -12,7 +13,9 @@ class User(AbstractUser):
         verbose_name_plural = "Users"
 
 
-class Entrepreneur(User):
+
+class Entrepreneur_Data(models.Model):
+    id = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE)
     degree = models.CharField(max_length=255)
     institution = models.CharField(max_length=255)
     gender = models.CharField(max_length=255)
@@ -21,11 +24,12 @@ class Entrepreneur(User):
     studyField = models.CharField(max_length=255)
 
     def __str__(self) -> str:
-        return f"{self.last_name}, {self.first_name}"
+        return f"{self.id}"
+
     class Meta:
         app_label = 'sel4c'
-        verbose_name = "Entrepreneur"
-        verbose_name_plural = "Entrepreneurs"
+        verbose_name = "Entrepreneur's Data"
+        verbose_name_plural = "Entrepreneurs' Data"
 
 
 class Activity(models.Model):
@@ -58,7 +62,7 @@ class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     answer = models.IntegerField(default=0)
 
-    entrepreneur = models.ForeignKey(Entrepreneur, on_delete=models.CASCADE, null="N/A")
+    entrepreneur = models.ForeignKey(Entrepreneur_Data, on_delete=models.CASCADE, default=0)
 
     def __str__(self) -> str:
         return f"{self.question_id}.{self.id}"
@@ -72,7 +76,7 @@ class File(models.Model):
     filetype = models.CharField(max_length=255)
 
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
-    entrepreneur = models.ForeignKey(Entrepreneur, on_delete=models.CASCADE, null="N/A")
+    entrepreneur = models.ForeignKey(Entrepreneur_Data, on_delete=models.CASCADE, default=0)
 
     def __str__(self) -> str:
         return f"{self.id} ({self.activity_id})"

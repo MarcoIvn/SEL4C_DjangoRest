@@ -18,19 +18,16 @@ class UsersSerializer(serializers.HyperlinkedModelSerializer):
                 'username',
                 'email',
                 'first_name', 
-                'last_name', 
-                'is_admin']
+                'last_name',
+                'is_staff',
+                'is_superuser',
+                'is_entrepreneur']
 
 
 class EntrepreneurSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = models.Entrepreneur
-        fields = ['id',
-                'username',
-                'email', 
-                'first_name',
-                'last_name',
-                'is_admin',
+        model = models.Entrepreneur_Data
+        fields = ['user',
                 'degree', 
                 'institution', 
                 'gender', 
@@ -46,8 +43,8 @@ class ActivitySerializer(serializers.HyperlinkedModelSerializer):
                 'title', 
                 'description', 
                 'deliveries']
-
-
+        
+    
 class QuestionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Question
@@ -63,7 +60,7 @@ class AnswerSerializer(serializers.HyperlinkedModelSerializer):
                 'question', 
                 'answer', 
                 'entrepreneur'] 
-
+        
 
 class FileSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
