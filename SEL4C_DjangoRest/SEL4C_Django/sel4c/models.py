@@ -4,11 +4,14 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
 class User(AbstractUser):
+
   is_entrepreneur = models.BooleanField(default=False)
+
   def __str__(self):
       return self.username 
   class Meta:
         verbose_name_plural = "Users"
+
 
 
 class Entrepreneur_Data(models.Model):

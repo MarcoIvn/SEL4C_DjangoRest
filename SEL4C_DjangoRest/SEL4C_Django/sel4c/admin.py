@@ -32,6 +32,7 @@ class CustomUserAdmin(UserAdmin):
         return super().formfield_for_manytomany(db_field, request, **kwargs)
 
 
+
 admin.site.register(models.Entrepreneur_Data)
 admin.site.register(models.User,CustomUserAdmin)
 admin.site.register(models.Activity)

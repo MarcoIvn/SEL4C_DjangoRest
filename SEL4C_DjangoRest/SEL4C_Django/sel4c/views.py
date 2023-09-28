@@ -115,13 +115,14 @@ def logoutView(request):
     return redirect('login')
 
 
-class UsuarioViewSet(viewsets.ModelViewSet):
+class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Usuarios to be viewed or edited.
     """
     permission_classes = [permissions.IsAuthenticated]
     queryset = models.User.objects.all()
     serializer_class = serializers.UsuarioSerializer
+
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
