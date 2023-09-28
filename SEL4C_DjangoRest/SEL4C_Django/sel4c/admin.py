@@ -33,7 +33,7 @@ class CustomUserAdmin(UserAdmin):
 
 
 admin.site.register(models.Entrepreneur)
-admin.site.register(models.Admin,CustomUserAdmin)
+admin.site.register(models.Usuario,CustomUserAdmin)
 admin.site.register(models.Activity)
 admin.site.register(models.File)
 admin.site.register(models.Question)
