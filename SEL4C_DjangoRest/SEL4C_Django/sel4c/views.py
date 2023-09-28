@@ -7,16 +7,42 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.views import View
+import json
 
 class HomeView(View):
   def get(self,request):
-    entrepreneurs = models.Entrepreneur.objects.all()  # Recupera todos los objetos Entrepreneur
-    context = {'entrepreneurs': entrepreneurs}
+    entrepreneurs = models.Entrepreneur.objects.all()  
+    activities = models.Activity.objects.all()
+
+    #activity_labels = [f"Actividad {activity.activity_num}" for activity in activities]
+    activity_labels = []
+    activity_deliveries = []
+    for activity in activities:
+       activity_labels.append(f"Actividad {activity.activity_num}")
+       activity_deliveries.append(f"{activity.deliveries}")
+    context = {
+      'entrepreneurs': entrepreneurs,
+      'activity_labels': json.dumps(activity_labels),
+      'activity_deliveries': json.dumps(activity_deliveries)
+    }
+    print(context)
     if request.user.is_authenticated:
       return render(request, "sel4c/index.html", context)
     else:
       messages.success(request, ("Necesita Iniciar Sesión"))
       return redirect('login')
+
+class EntrepreneurView(View):
+  def get(self, request, id):
+    entrepreneur = models.Entrepreneur.objects.filter(id = id)
+    context = {
+      'entrepreneur': entrepreneur
+    }
+    print(context)
+    if request.user.is_authenticated and entrepreneur.exists:
+      return render(request, "sel4c/entrepreneur/show.html", context)
+    else:
+      return render(request, "sel4c/index.html")
     
   
 class LoginView(View):

@@ -33,6 +33,7 @@ class Activity(models.Model):
     activity_num = models.IntegerField(default=0)
     title = models.CharField(max_length=255)
     description = models.TextField()
+    deliveries = models.IntegerField(default=0)
 
     def __str__(self) -> str:
         return f"{self.activity_num}"

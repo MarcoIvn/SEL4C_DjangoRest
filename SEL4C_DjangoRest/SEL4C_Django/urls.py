@@ -33,6 +33,7 @@ urlpatterns = [
   path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 
   path("home/",views.HomeView.as_view(), name= "home"),
+  path("users/<int:id>/", views.EntrepreneurView.as_view(), name= "user_page"),
   #path('', include('django.contrib.auth.urls')),
   path('',views.LoginView.as_view(), name= "login"),
   path('logout', views.logoutView, name = "logout"),

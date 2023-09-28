@@ -44,7 +44,8 @@ class ActivitySerializer(serializers.HyperlinkedModelSerializer):
         model = models.Activity
         fields = ['activity_num', 
                 'title', 
-                'description']
+                'description', 
+                'deliveries']
 
 
 class QuestionSerializer(serializers.HyperlinkedModelSerializer):

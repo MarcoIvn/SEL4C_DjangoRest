@@ -4,23 +4,28 @@ Chart.defaults.global.defaultFontColor = '#292b2c';
 
 // Area Chart Example
 var ctx = document.getElementById("myAreaChart");
+var activity_labels = ctx.getAttribute("data-labels");
+var activity_deliveries = ctx.getAttribute("data-data")
+activity_labels = JSON.parse(activity_labels);
+activity_deliveries = JSON.parse(activity_deliveries);
+
 var myLineChart = new Chart(ctx, {
   type: 'line',
   data: {
-    labels: ["Mar 1", "Mar 2", "Mar 3", "Mar 4", "Mar 5", "Mar 6", "Mar 7", "Mar 8", "Mar 9", "Mar 10", "Mar 11", "Mar 12", "Mar 13"],
+    labels: activity_labels,
     datasets: [{
-      label: "Sessions",
+      label: "Entregables",
       lineTension: 0.3,
-      backgroundColor: "rgba(2,117,216,0.2)",
-      borderColor: "rgba(2,117,216,1)",
+      backgroundColor: "rgba(213,184,255,1)",
+      borderColor: "rgba(159,90,253,1)",
       pointRadius: 5,
-      pointBackgroundColor: "rgba(2,117,216,1)",
-      pointBorderColor: "rgba(255,255,255,0.8)",
+      pointBackgroundColor: "rgba(90,34,139,1)",
+      pointBorderColor: "rgba(191,85,236,1)",
       pointHoverRadius: 5,
-      pointHoverBackgroundColor: "rgba(2,117,216,1)",
+      pointHoverBackgroundColor: "rgba(140,20,252,1)",
       pointHitRadius: 50,
       pointBorderWidth: 2,
-      data: [10000, 30162, 26263, 18394, 18287, 28682, 31274, 33259, 25849, 24159, 32651, 31984, 38451],
+      data: activity_deliveries,
     }],
   },
   options: {
@@ -39,7 +44,7 @@ var myLineChart = new Chart(ctx, {
       yAxes: [{
         ticks: {
           min: 0,
-          max: 40000,
+          max: 500,
           maxTicksLimit: 5
         },
         gridLines: {
