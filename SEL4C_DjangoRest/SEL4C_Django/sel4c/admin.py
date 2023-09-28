@@ -11,7 +11,7 @@ class CustomUserAdmin(UserAdmin):
 
     # campos
     fieldsets = (
-        (None, {'fields': ('username', 'email', 'password')}),
+        (None, {'fields': ('username', 'email', 'password', 'is_entrepreneur')}),
         ('Permissions', {'fields': ('is_superuser','user_permissions',)}),
         ('Personal info', {'fields': ('first_name', 'last_name')}),
     )
@@ -32,8 +32,8 @@ class CustomUserAdmin(UserAdmin):
         return super().formfield_for_manytomany(db_field, request, **kwargs)
 
 
-admin.site.register(models.Entrepreneur)
-admin.site.register(models.Usuario,CustomUserAdmin)
+admin.site.register(models.Entrepreneur_Data)
+admin.site.register(models.User,CustomUserAdmin)
 admin.site.register(models.Activity)
 admin.site.register(models.File)
 admin.site.register(models.Question)

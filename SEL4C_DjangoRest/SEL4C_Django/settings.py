@@ -131,7 +131,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'sel4c.Usuario'
+AUTH_USER_MODEL = 'sel4c.User'
 
 # Configuración de rutas estáticas
 STATIC_URL = '/static/'
