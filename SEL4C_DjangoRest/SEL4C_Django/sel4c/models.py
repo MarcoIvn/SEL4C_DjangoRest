@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 
-class Usuario(AbstractUser):
+class User(AbstractUser):
   is_admin = models.BooleanField(default=False)
 
   def __str__(self):
@@ -12,7 +12,7 @@ class Usuario(AbstractUser):
         verbose_name_plural = "Users"
 
 
-class Entrepreneur(Usuario):
+class Entrepreneur(User):
     degree = models.CharField(max_length=255)
     institution = models.CharField(max_length=255)
     gender = models.CharField(max_length=255)
