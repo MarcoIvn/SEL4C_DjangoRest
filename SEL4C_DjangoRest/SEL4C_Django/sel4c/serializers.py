@@ -2,6 +2,8 @@ from django.contrib.auth.models import User, Group
 import SEL4C_Django.sel4c.models as models
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
+from rest_framework.response import Response
+
 
 
 """ 
@@ -17,27 +19,26 @@ class UsersSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['id',
                 'username',
                 'email',
+                'password',
                 'first_name', 
-                'last_name', 
-                'is_admin']
+                'last_name',
+                'is_staff',
+                'is_superuser',
+                'is_entrepreneur']
 
 
 class EntrepreneurSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.PrimaryKeyRelatedField(many=False, queryset=models.User.objects.all())
     class Meta:
-        model = models.Entrepreneur
+        model = models.Entrepreneur_Data
         fields = ['id',
-                'username',
-                'email', 
-                'first_name',
-                'last_name',
-                'is_admin',
                 'degree', 
                 'institution', 
                 'gender', 
                 'age', 
                 'country', 
                 'studyField']
-
+        
 
 class ActivitySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -46,8 +47,8 @@ class ActivitySerializer(serializers.HyperlinkedModelSerializer):
                 'title', 
                 'description', 
                 'deliveries']
-
-
+        
+    
 class QuestionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Question
@@ -63,7 +64,7 @@ class AnswerSerializer(serializers.HyperlinkedModelSerializer):
                 'question', 
                 'answer', 
                 'entrepreneur'] 
-
+        
 
 class FileSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

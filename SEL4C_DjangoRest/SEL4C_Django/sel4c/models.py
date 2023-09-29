@@ -4,7 +4,8 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
 class User(AbstractUser):
-  is_admin = models.BooleanField(default=False)
+
+  is_entrepreneur = models.BooleanField(default=False)
 
   def __str__(self):
       return self.username 
@@ -12,7 +13,8 @@ class User(AbstractUser):
         verbose_name_plural = "Users"
 
 
-class Entrepreneur(User):
+class Entrepreneur_Data(models.Model):
+    id = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE)
     degree = models.CharField(max_length=255)
     institution = models.CharField(max_length=255)
     gender = models.CharField(max_length=255)
@@ -21,12 +23,36 @@ class Entrepreneur(User):
     studyField = models.CharField(max_length=255)
 
     def __str__(self) -> str:
-        return f"{self.last_name}, {self.first_name}"
+        return f"{self.id}"
+
     class Meta:
         app_label = 'sel4c'
-        verbose_name = "Entrepreneur"
-        verbose_name_plural = "Entrepreneurs"
+        verbose_name = "Entrepreneur's Data"
+        verbose_name_plural = "Entrepreneurs' Data"
+    
+    @classmethod
+    def create(cls, user_identifier, degree, institution, gender, age, country, studyField):
+        # Try to find the user by either username or id
+        try:
+            user = User.objects.get(username=user_identifier)
+        except User.DoesNotExist:
+            try:
+                user = User.objects.get(id=user_identifier)
+            except User.DoesNotExist:
+                raise Exception("User not found.")
 
+        # Create or update Entrepreneur_Data instance
+        entrepreneur_data, created = cls.objects.get_or_create(id=user)
+        entrepreneur_data.degree = degree
+        entrepreneur_data.institution = institution
+        entrepreneur_data.gender = gender
+        entrepreneur_data.age = age
+        entrepreneur_data.country = country
+        entrepreneur_data.studyField = studyField
+        entrepreneur_data.save()
+
+        return entrepreneur_data
+    
 
 class Activity(models.Model):
     id_activity = models.BigAutoField(primary_key=True)
@@ -58,7 +84,7 @@ class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     answer = models.IntegerField(default=0)
 
-    entrepreneur = models.ForeignKey(Entrepreneur, on_delete=models.CASCADE, null="N/A")
+    entrepreneur = models.ForeignKey(Entrepreneur_Data, on_delete=models.CASCADE, default=0)
 
     def __str__(self) -> str:
         return f"{self.question_id}.{self.id}"
@@ -72,7 +98,7 @@ class File(models.Model):
     filetype = models.CharField(max_length=255)
 
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
-    entrepreneur = models.ForeignKey(Entrepreneur, on_delete=models.CASCADE, null="N/A")
+    entrepreneur = models.ForeignKey(Entrepreneur_Data, on_delete=models.CASCADE, default=0)
 
     def __str__(self) -> str:
         return f"{self.id} ({self.activity_id})"
