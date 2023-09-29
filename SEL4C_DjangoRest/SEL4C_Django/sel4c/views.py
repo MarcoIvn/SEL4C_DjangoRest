@@ -80,8 +80,9 @@ class EntrepreneurView(View):
         users = models.User.objects.filter(is_entrepreneur=True)
 
         # Use Subquery and OuterRef to perform a LEFT JOIN-like operation
-        entrepreneur = models.Entrepreneur_Data.objects.filter(id=OuterRef('id')).only('degree', 'institution', 'gender', 'age', 'country', 'studyField')
-        users = users.annotate(
+        entrepreneur = models.Entrepreneur_Data.objects.filter(id_id=id).only('degree', 'institution', 'gender', 'age', 'country', 'studyField')
+        print(entrepreneur)
+        user= users.filter(id = id).annotate(
             degree=Subquery(entrepreneur.values('degree')[:1]),
             institution=Subquery(entrepreneur.values('institution')[:1]),
             gender=Subquery(entrepreneur.values('gender')[:1]),
@@ -91,7 +92,7 @@ class EntrepreneurView(View):
         )
 
         context = {
-            'entrepreneur': users
+            'entrepreneur': user
         }
         print(context)
         if request.user.is_authenticated and entrepreneur.exists:
