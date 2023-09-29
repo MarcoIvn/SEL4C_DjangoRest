@@ -2,6 +2,8 @@ from django.contrib.auth.models import User, Group
 import SEL4C_Django.sel4c.models as models
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
+from rest_framework.response import Response
+
 
 
 """ 
@@ -17,6 +19,7 @@ class UsersSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['id',
                 'username',
                 'email',
+                'password',
                 'first_name', 
                 'last_name',
                 'is_staff',
@@ -25,16 +28,17 @@ class UsersSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class EntrepreneurSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.PrimaryKeyRelatedField(many=False, queryset=models.User.objects.all())
     class Meta:
         model = models.Entrepreneur_Data
-        fields = ['user',
+        fields = ['id',
                 'degree', 
                 'institution', 
                 'gender', 
                 'age', 
                 'country', 
                 'studyField']
-
+        
 
 class ActivitySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

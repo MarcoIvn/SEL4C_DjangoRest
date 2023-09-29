@@ -32,6 +32,12 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
 }
 # Application definition
 
@@ -46,6 +52,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_spectacular',
     'SEL4C_Django.sel4c',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [

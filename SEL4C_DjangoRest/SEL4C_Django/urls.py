@@ -5,7 +5,7 @@ from SEL4C_Django.sel4c import views
 from drf_spectacular.views import SpectacularAPIView
 from drf_spectacular.views import SpectacularRedocView, SpectacularSwaggerView
 from drf_spectacular.views import SpectacularAPIView
-
+from rest_framework_simplejwt import views as jwt_views
 
 
 router = routers.DefaultRouter()
@@ -39,4 +39,7 @@ urlpatterns = [
   path('logout', views.logoutView, name = "logout"),
 
   path('register/', views.registerUser, name='register'),
+
+  path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
+  path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
 ]

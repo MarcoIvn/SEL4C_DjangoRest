@@ -13,7 +13,6 @@ class User(AbstractUser):
         verbose_name_plural = "Users"
 
 
-
 class Entrepreneur_Data(models.Model):
     id = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE)
     degree = models.CharField(max_length=255)
@@ -30,7 +29,30 @@ class Entrepreneur_Data(models.Model):
         app_label = 'sel4c'
         verbose_name = "Entrepreneur's Data"
         verbose_name_plural = "Entrepreneurs' Data"
+    
+    @classmethod
+    def create(cls, user_identifier, degree, institution, gender, age, country, studyField):
+        # Try to find the user by either username or id
+        try:
+            user = User.objects.get(username=user_identifier)
+        except User.DoesNotExist:
+            try:
+                user = User.objects.get(id=user_identifier)
+            except User.DoesNotExist:
+                raise Exception("User not found.")
 
+        # Create or update Entrepreneur_Data instance
+        entrepreneur_data, created = cls.objects.get_or_create(id=user)
+        entrepreneur_data.degree = degree
+        entrepreneur_data.institution = institution
+        entrepreneur_data.gender = gender
+        entrepreneur_data.age = age
+        entrepreneur_data.country = country
+        entrepreneur_data.studyField = studyField
+        entrepreneur_data.save()
+
+        return entrepreneur_data
+    
 
 class Activity(models.Model):
     id_activity = models.BigAutoField(primary_key=True)

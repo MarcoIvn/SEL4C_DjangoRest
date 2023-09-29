@@ -11,9 +11,8 @@ class CustomUserAdmin(UserAdmin):
 
     # campos
     fieldsets = (
-        (None, {'fields': ('username', 'email', 'password', 'is_entrepreneur')}),
+        (None, {'fields': ('username', 'email', 'password', 'first_name', 'last_name', 'is_entrepreneur')}),
         ('Permissions', {'fields': ('is_superuser','user_permissions',)}),
-        ('Personal info', {'fields': ('first_name', 'last_name')}),
     )
     
     # Visualización

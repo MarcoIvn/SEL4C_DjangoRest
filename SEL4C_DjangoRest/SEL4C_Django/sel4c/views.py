@@ -44,9 +44,12 @@ import json
  
 class HomeView(View):
     def get(self, request):
+        # Filter users with is_entrepreneur set to True
+        users = models.User.objects.filter(is_entrepreneur=True)
+
         # Use Subquery and OuterRef to perform a LEFT JOIN-like operation
         entrepreneurs_data = models.Entrepreneur_Data.objects.filter(id=OuterRef('id')).only('degree', 'institution', 'gender', 'age', 'country', 'studyField')
-        users = models.User.objects.all().annotate(
+        users = users.annotate(
             degree=Subquery(entrepreneurs_data.values('degree')[:1]),
             institution=Subquery(entrepreneurs_data.values('institution')[:1]),
             gender=Subquery(entrepreneurs_data.values('gender')[:1]),
@@ -121,7 +124,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     permission_classes = [permissions.IsAuthenticated]
     queryset = models.User.objects.all()
-    serializer_class = serializers.UsuarioSerializer
+    serializer_class = serializers.UsersSerializer
 
 
     def list(self, request, *args, **kwargs):
