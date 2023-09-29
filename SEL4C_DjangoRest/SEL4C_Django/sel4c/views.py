@@ -77,14 +77,21 @@ class HomeView(View):
 
 class EntrepreneurView(View):
     def get(self, request, id):
-        users = models.User.objects.all()
-        entrepreneur = models.Entrepreneur_Data.objects.all()
-        qs = set()
-        qs.union(users, entrepreneur)
-        print(qs)
+        users = models.User.objects.filter(is_entrepreneur=True)
+
+        # Use Subquery and OuterRef to perform a LEFT JOIN-like operation
+        entrepreneur = models.Entrepreneur_Data.objects.filter(id=OuterRef('id')).only('degree', 'institution', 'gender', 'age', 'country', 'studyField')
+        users = users.annotate(
+            degree=Subquery(entrepreneur.values('degree')[:1]),
+            institution=Subquery(entrepreneur.values('institution')[:1]),
+            gender=Subquery(entrepreneur.values('gender')[:1]),
+            age=Subquery(entrepreneur.values('age')[:1]),
+            country=Subquery(entrepreneur.values('country')[:1]),
+            studyField=Subquery(entrepreneur.values('studyField')[:1])
+        )
 
         context = {
-            'entrepreneur': qs
+            'entrepreneur': users
         }
         print(context)
         if request.user.is_authenticated and entrepreneur.exists:
