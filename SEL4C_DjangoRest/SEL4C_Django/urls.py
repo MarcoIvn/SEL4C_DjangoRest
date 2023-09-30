@@ -38,7 +38,7 @@ urlpatterns = [
   path('',views.LoginView.as_view(), name= "login"),
   path('logout', views.logoutView, name = "logout"),
 
-  path('register/', views.registerUser, name='register'),
+  path('register/', views.registerUser.as_view(), name='register'),
 
   path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
   path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
