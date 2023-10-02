@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-68u71jikepj59e(mv5e&w%=sjvl25f$v5t2wm@h_#3!vy5stkr
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 #Rest Framework 
 REST_FRAMEWORK = {
