@@ -56,7 +56,6 @@ class Entrepreneur_Data(models.Model):
     
 
 class Activity(models.Model):
-    id_activity = models.BigAutoField(primary_key=True)
     activity_num = models.IntegerField(default=0)
     title = models.CharField(max_length=255)
     description = models.TextField()
@@ -69,7 +68,6 @@ class Activity(models.Model):
 
 
 class Question(models.Model):
-    id_question = models.BigAutoField(primary_key=True)
     question_num = models.IntegerField(default=0)
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
     description = models.TextField()
@@ -81,7 +79,6 @@ class Question(models.Model):
 
 
 class Answer(models.Model):
-    id_answer = models.BigAutoField(primary_key=True)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     answer = models.IntegerField(default=0)
 
@@ -94,7 +91,6 @@ class Answer(models.Model):
 
 
 class File(models.Model):
-    id_file = models.BigAutoField(primary_key=True)
     file = models.FileField(upload_to='files/')
     filetype = models.CharField(max_length=255)
 
