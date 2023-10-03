@@ -39,6 +39,11 @@ urlpatterns = [
   path('',views.LoginView.as_view(), name= "login"),
   path('logout', views.logoutView, name = "logout"),
   path('home/register/', views.registerAdministrator.as_view(), name='register'),
+  path('eliminar-administrador/<int:id>/', views.deleteAdministrator, name='delete_administrator'),
+  path('editar-administrador/<int:id>/', views.editAdministrator, name='edit_administrator'),
+  path('home/administrators/', views.AdministratorsView.as_view(), name= 'administrators'),
+  path('home/administrators/administrator/<int:id>/', views.AdministratorView.as_view(), name= 'administrator'),
+  
   path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
   path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
   path('api/token/verify/', jwt_views.TokenVerifyView.as_view(), name='token_verify'),
