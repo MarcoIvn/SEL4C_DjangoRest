@@ -4,8 +4,6 @@ from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 from rest_framework.response import Response
 
-
-
 """ 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -13,9 +11,9 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['url', 'name']
  """
 
-class UsersSerializer(serializers.HyperlinkedModelSerializer):
+class AdministratorSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = models.User
+        model = models.Administrator
         fields = ['id',
                 'username',
                 'email',
@@ -23,15 +21,16 @@ class UsersSerializer(serializers.HyperlinkedModelSerializer):
                 'first_name', 
                 'last_name',
                 'is_staff',
-                'is_superuser',
-                'is_entrepreneur']
+                'is_superuser']
 
 
 class EntrepreneurSerializer(serializers.HyperlinkedModelSerializer):
-    id = serializers.PrimaryKeyRelatedField(many=False, queryset=models.User.objects.all())
     class Meta:
-        model = models.Entrepreneur_Data
-        fields = ['id',
+        model = models.Entrepreneur
+        fields = ['username',
+                'email',
+                'first_name',
+                'last_name',
                 'degree', 
                 'institution', 
                 'gender', 

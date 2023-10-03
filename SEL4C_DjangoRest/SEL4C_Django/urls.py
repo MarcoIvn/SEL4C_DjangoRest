@@ -13,7 +13,7 @@ router = routers.DefaultRouter()
 """ router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet) """
 
-router.register(r'usuarios', views.UserViewSet)
+router.register(r'admins', views.AdminViewSet)
 router.register(r'entrepreneurs', views.EntrepreneurViewSet)
 router.register(r'activities', views.ActivityViewSet)
 router.register(r'files', views.FileViewSet)
@@ -34,16 +34,12 @@ urlpatterns = [
   path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 
   path("home/",views.HomeView.as_view(), name= "home"),
-  path("users/<int:id>/", views.EntrepreneurView.as_view(), name= "user_page"),
+  path("entrepreneurs/<int:id>/", views.EntrepreneurView.as_view(), name= "entrepreneur_page"),
   #path('', include('django.contrib.auth.urls')),
   path('',views.LoginView.as_view(), name= "login"),
   path('logout', views.logoutView, name = "logout"),
-
-  # Create Administrator
-  path('register/', views.registerUser.as_view(), name='register'),
-  path('profile/', login_required(views.change_user,login_url='login'), name='profile'),
-  path('<int:pk>/password/', login_required(views.change_password,login_url='loginview'), name='password'),
-
+  path('register/', views.registerAdministrator, name='register'),
   path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
   path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
+  path('api/token/verify/', jwt_views.TokenVerifyView.as_view(), name='token_verify'),
 ]

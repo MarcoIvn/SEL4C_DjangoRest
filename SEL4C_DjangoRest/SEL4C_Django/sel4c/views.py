@@ -15,8 +15,8 @@ import json
 
 """ class HomeView(View):
     def get(self, request):
-        users = models.User.objects.all()
-        entrepreneurs = models.Entrepreneur_Data.objects.all()
+        users = models.Administrator.objects.all()
+        entrepreneurs = models.Entrepreneur.objects.all()
         qs = set()
         qs.union(users, entrepreneurs)
         activities = models.Activity.objects.all()
@@ -44,25 +44,14 @@ import json
  
 class HomeView(View):
     def get(self, request):
-        # Filter users with is_entrepreneur set to True
-        users = models.User.objects.filter(is_entrepreneur=True)
-
-        # Use Subquery and OuterRef to perform a LEFT JOIN-like operation
-        entrepreneurs_data = models.Entrepreneur_Data.objects.filter(id=OuterRef('id')).only('degree', 'institution', 'gender', 'age', 'country', 'studyField')
-        users = users.annotate(
-            degree=Subquery(entrepreneurs_data.values('degree')[:1]),
-            institution=Subquery(entrepreneurs_data.values('institution')[:1]),
-            gender=Subquery(entrepreneurs_data.values('gender')[:1]),
-            age=Subquery(entrepreneurs_data.values('age')[:1]),
-            country=Subquery(entrepreneurs_data.values('country')[:1]),
-            studyField=Subquery(entrepreneurs_data.values('studyField')[:1])
-        )
+        
+        entrepreneurs = models.Entrepreneur.objects.all()
 
         activities = models.Activity.objects.all()
 
         # Create the context
         context = {
-            'entrepreneurs': users,
+            'entrepreneurs': entrepreneurs,
             'activity_labels': [f"Actividad {activity.activity_num}" for activity in activities],
             'activity_deliveries': [activity.deliveries for activity in activities],
         }
@@ -77,10 +66,11 @@ class HomeView(View):
 
 class EntrepreneurView(View):
     def get(self, request, id):
+        users = models.Administrator.objects.filter(is_entrepreneur=True)
+
         # Use Subquery and OuterRef to perform a LEFT JOIN-like operation
-        entrepreneur = models.Entrepreneur_Data.objects.filter(id_id=id).only('degree', 'institution', 'gender', 'age', 'country', 'studyField')
-        print(entrepreneur)
-        user= models.User.objects.filter(id = id).annotate(
+        entrepreneur = models.Entrepreneur.objects.filter(id=OuterRef('id')).only('degree', 'institution', 'gender', 'age', 'country', 'studyField')
+        users = users.annotate(
             degree=Subquery(entrepreneur.values('degree')[:1]),
             institution=Subquery(entrepreneur.values('institution')[:1]),
             gender=Subquery(entrepreneur.values('gender')[:1]),
@@ -124,13 +114,13 @@ def logoutView(request):
     return redirect('login')
 
 
-class UserViewSet(viewsets.ModelViewSet):
+class AdminViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Usuarios to be viewed or edited.
     """
     permission_classes = [permissions.IsAuthenticated]
-    queryset = models.User.objects.all()
-    serializer_class = serializers.UsersSerializer
+    queryset = models.Administrator.objects.all()
+    serializer_class = serializers.AdministratorSerializer
 
 
     def list(self, request, *args, **kwargs):
@@ -143,8 +133,8 @@ class EntrepreneurViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Usuarios to be viewed or edited.
     """
-    permission_classes = [permissions.IsAuthenticated]
-    queryset = models.Entrepreneur_Data.objects.all()
+    # permission_classes = [permissions.IsAuthenticated]
+    queryset = models.Entrepreneur.objects.all()
     serializer_class = serializers.EntrepreneurSerializer
 
     def list(self, request, *args, **kwargs):
@@ -208,17 +198,9 @@ class AnswerViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
-class registerUser(View):
-    def get(self,request):
-      if request.user.is_authenticated and request.user.is_superuser:
-        form = forms.RegisterUserForm()
-        return render(request, 'sel4c/user/new.html', {"form": form})
-      else: 
-        return redirect("/home")
-    
-    def post(self,request):
-      if request.user.is_authenticated and request.user.is_superuser:
-        form = forms.RegisterUserForm(request.POST)
+def registerAdministrator(request):
+    if (request.method == 'POST'):
+        form = forms.RegisterAdministratorForm(request.POST)
         if form.is_valid():
           try:
             form.save()
@@ -250,19 +232,6 @@ def change_user(request):
         else:
             messages.error(request, 'Please correct the error below.')
     else:
-        form = forms.ChangeUserForm(instance=request.user)
-    return render(request, 'sel4c/user/change_user.html', {'form': form})
+        form = forms.RegisterAdministratorForm()
+        return render(request, 'sel4c/register_user.html', {"form": form})
 
-def change_password(request, pk):
-    if request.method == 'POST':
-        form = forms.ChangePassword(request.user, request.POST)
-        if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)  # Important!
-            messages.success(request, 'Your password was successfully updated!')
-            return redirect('profile')
-        else:
-            messages.error(request, 'Please correct the error below.')
-    else:
-        form = forms.ChangePassword(request.user)
-    return render(request, 'sel4c/user/change_password.html', {'form': form})
