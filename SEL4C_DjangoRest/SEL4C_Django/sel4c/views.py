@@ -15,8 +15,8 @@ import json
 
 """ class HomeView(View):
     def get(self, request):
-        users = models.User.objects.all()
-        entrepreneurs = models.Entrepreneur_Data.objects.all()
+        users = models.Administrator.objects.all()
+        entrepreneurs = models.Entrepreneur.objects.all()
         qs = set()
         qs.union(users, entrepreneurs)
         activities = models.Activity.objects.all()
@@ -44,25 +44,14 @@ import json
  
 class HomeView(View):
     def get(self, request):
-        # Filter users with is_entrepreneur set to True
-        users = models.User.objects.filter(is_entrepreneur=True)
-
-        # Use Subquery and OuterRef to perform a LEFT JOIN-like operation
-        entrepreneurs_data = models.Entrepreneur_Data.objects.filter(id=OuterRef('id')).only('degree', 'institution', 'gender', 'age', 'country', 'studyField')
-        users = users.annotate(
-            degree=Subquery(entrepreneurs_data.values('degree')[:1]),
-            institution=Subquery(entrepreneurs_data.values('institution')[:1]),
-            gender=Subquery(entrepreneurs_data.values('gender')[:1]),
-            age=Subquery(entrepreneurs_data.values('age')[:1]),
-            country=Subquery(entrepreneurs_data.values('country')[:1]),
-            studyField=Subquery(entrepreneurs_data.values('studyField')[:1])
-        )
+        
+        entrepreneurs = models.Entrepreneur.objects.all()
 
         activities = models.Activity.objects.all()
 
         # Create the context
         context = {
-            'entrepreneurs': users,
+            'entrepreneurs': entrepreneurs,
             'activity_labels': [f"Actividad {activity.activity_num}" for activity in activities],
             'activity_deliveries': [activity.deliveries for activity in activities],
         }
@@ -77,10 +66,10 @@ class HomeView(View):
 
 class EntrepreneurView(View):
     def get(self, request, id):
-        users = models.User.objects.filter(is_entrepreneur=True)
+        users = models.Administrator.objects.filter(is_entrepreneur=True)
 
         # Use Subquery and OuterRef to perform a LEFT JOIN-like operation
-        entrepreneur = models.Entrepreneur_Data.objects.filter(id=OuterRef('id')).only('degree', 'institution', 'gender', 'age', 'country', 'studyField')
+        entrepreneur = models.Entrepreneur.objects.filter(id=OuterRef('id')).only('degree', 'institution', 'gender', 'age', 'country', 'studyField')
         users = users.annotate(
             degree=Subquery(entrepreneur.values('degree')[:1]),
             institution=Subquery(entrepreneur.values('institution')[:1]),
@@ -125,13 +114,13 @@ def logoutView(request):
     return redirect('login')
 
 
-class UserViewSet(viewsets.ModelViewSet):
+class AdminViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Usuarios to be viewed or edited.
     """
     permission_classes = [permissions.IsAuthenticated]
-    queryset = models.User.objects.all()
-    serializer_class = serializers.UsersSerializer
+    queryset = models.Administrator.objects.all()
+    serializer_class = serializers.AdministratorSerializer
 
 
     def list(self, request, *args, **kwargs):
@@ -144,8 +133,8 @@ class EntrepreneurViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Usuarios to be viewed or edited.
     """
-    permission_classes = [permissions.IsAuthenticated]
-    queryset = models.Entrepreneur_Data.objects.all()
+    # permission_classes = [permissions.IsAuthenticated]
+    queryset = models.Entrepreneur.objects.all()
     serializer_class = serializers.EntrepreneurSerializer
 
     def list(self, request, *args, **kwargs):
@@ -210,9 +199,9 @@ class AnswerViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-def registerUser(request):
+def registerAdministrator(request):
     if (request.method == 'POST'):
-        form = forms.RegisterUserForm(request.POST)
+        form = forms.RegisterAdministratorForm(request.POST)
         if form.is_valid():
             try:
                 form.save()
@@ -231,5 +220,5 @@ def registerUser(request):
         else:
             return render(request, 'sel4c/register_user.html', {"form": form})
     else:
-        form = forms.RegisterUserForm()
+        form = forms.RegisterAdministratorForm()
         return render(request, 'sel4c/register_user.html', {"form": form})
