@@ -66,21 +66,10 @@ class HomeView(View):
 
 class EntrepreneurView(View):
     def get(self, request, id):
-        users = models.Administrator.objects.filter(is_entrepreneur=True)
-
         # Use Subquery and OuterRef to perform a LEFT JOIN-like operation
-        entrepreneur = models.Entrepreneur.objects.filter(id=OuterRef('id')).only('degree', 'institution', 'gender', 'age', 'country', 'studyField')
-        users = users.annotate(
-            degree=Subquery(entrepreneur.values('degree')[:1]),
-            institution=Subquery(entrepreneur.values('institution')[:1]),
-            gender=Subquery(entrepreneur.values('gender')[:1]),
-            age=Subquery(entrepreneur.values('age')[:1]),
-            country=Subquery(entrepreneur.values('country')[:1]),
-            studyField=Subquery(entrepreneur.values('studyField')[:1])
-        )
-
+        entrepreneur = models.Entrepreneur.objects.filter(id = id)
         context = {
-            'entrepreneur': user
+            'entrepreneur': entrepreneur
         }
         print(context)
         if request.user.is_authenticated and entrepreneur.exists:
@@ -104,7 +93,7 @@ class LoginView(View):
             return redirect('home')
         else:
             messages.success(
-                request, ("Nombre de usuario o contraseña incorrectos, Intentelo de nuevo"))
+            request, ("Nombre de usuario o contraseña incorrectos, Intentelo de nuevo"))
             return redirect('login')
 
 
@@ -198,28 +187,31 @@ class AnswerViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
-def registerAdministrator(request):
-    if (request.method == 'POST'):
-        form = forms.RegisterAdministratorForm(request.POST)
-        if form.is_valid():
-          try:
-            form.save()
-          except:
-            messages.error(request, ("Error al crear usuario"))
-            return redirect('register')
-          else:
-            username = form.cleaned_data["username"]
-            password = form.cleaned_data["password1"]
-            user = authenticate(
-            request, username=username, password=password)
-            if user is not None:
-              login(request, user)
-              messages.success(request, ("Usuario creado exitosamente"))
-              return redirect('home')
-        else:
-          return render(request, 'sel4c/user/new.html', {"form": form})
-      else:
-        return redirect("home")
+class registerAdministrator(View):
+    def get(self,request):
+      if request.user.is_authenticated and request.user.is_superuser:
+        form = forms.RegisterAdministratorForm()
+        return render(request, 'sel4c/user/new.html', {"form": form})
+      else: 
+        return redirect("/home")
+    def post(self, request):
+        if request.user.is_authenticated and request.user.is_superuser:
+            form = forms.RegisterAdministratorForm(request.POST)
+            if form.is_valid():
+              try:
+                form.save()
+              except:
+                messages.error(request, ("Error al crear usuario"))
+                return redirect('register')
+              else:
+                #username = form.cleaned_data["username"]
+                #password = form.cleaned_data["password1"]
+                messages.success(request, ("Usuario creado exitosamente"))
+                return redirect('home')
+            else:
+              return render(request, 'sel4c/user/new.html', {"form": form})
+        else: 
+          return redirect("/home")
       
 # UPDATE User
 def change_user(request):

@@ -72,7 +72,6 @@
           <table id="datatablesSimple">
               <thead>
                   <tr>
-                      <th>Username</th>
                       <th>Name</th>
                       <th>Grado</th>
                       <th>Institución</th>
@@ -84,7 +83,6 @@
               </thead>
               <tfoot>
                   <tr>
-                      <th>Username</th>
                       <th>Name</th>
                       <th>Grado</th>
                       <th>Institución</th>
@@ -97,8 +95,7 @@
               <tbody>
                 {% for entrepreneur in entrepreneurs %}
                   <tr>
-                    <td> <a href="{% url 'user_page' entrepreneur.id %}"> {{ entrepreneur.username }} </a></td>
-                    <td>{{ entrepreneur.first_name }} {{entrepreneur.last_name}}</td>
+                    <td> <a href="{% url 'entrepreneur_page' entrepreneur.id %}"> {{ entrepreneur.first_name }} {{entrepreneur.last_name}} </a></td>
                     <td>{{ entrepreneur.degree }}</td>
                     <td>{{ entrepreneur.institution }}</td>
                     <td>{{ entrepreneur.gender }}</td>

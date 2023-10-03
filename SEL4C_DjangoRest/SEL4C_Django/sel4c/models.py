@@ -6,6 +6,7 @@ from django.contrib.auth.hashers import make_password
 
 class Administrator(AbstractUser):
     # Inherits id, username, password, first_name, last_name, is_staff, is_superuser
+    is_staff = models.BooleanField(default=True)
     def __str__(self):
         return self.username 
     class Meta:
@@ -13,7 +14,7 @@ class Administrator(AbstractUser):
 
 
 class Entrepreneur(models.Model):
-    username = models.CharField(primary_key=True, unique=True, default="N/A", max_length=40)
+    #username = models.CharField(primary_key=True, unique=True, default="N/A", max_length=40)
     email = models.EmailField(unique=True, max_length=25)
     password = models.CharField(max_length=255)
     first_name = models.CharField(max_length=15)
@@ -26,20 +27,17 @@ class Entrepreneur(models.Model):
     studyField = models.CharField(max_length=255)
 
     def __str__(self) -> str:
-        return f"{self.username}"
+        return f"{self.first_name} {self.last_name}"
 
     class Meta:
         app_label = 'sel4c'
-        verbose_name = "Entrepreneur's Data"
-        verbose_name_plural = "Entrepreneurs' Data"
+        verbose_name = "Entrepreneurs"
+        verbose_name_plural = "Entrepreneurs"
 
     def save(self, *args, **kwargs):
         self.password = make_password(self.password)    
         return super().save(*args, **kwargs)
            
-    
-    
-
 class Activity(models.Model):
     activity_num = models.IntegerField(default=0)
     title = models.CharField(max_length=255)
@@ -50,7 +48,6 @@ class Activity(models.Model):
         return f"{self.activity_num}"
     class Meta:
         app_label = 'sel4c'
-
 
 class Question(models.Model):
     question_num = models.IntegerField(default=0)
