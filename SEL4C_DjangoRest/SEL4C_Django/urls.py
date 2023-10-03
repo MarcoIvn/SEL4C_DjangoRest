@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.auth.decorators import login_required
 from django.urls import include, path
 from rest_framework import routers
 from SEL4C_Django.sel4c import views
@@ -38,7 +39,10 @@ urlpatterns = [
   path('',views.LoginView.as_view(), name= "login"),
   path('logout', views.logoutView, name = "logout"),
 
+  # Create Administrator
   path('register/', views.registerUser.as_view(), name='register'),
+  path('profile/', login_required(views.change_user,login_url='login'), name='profile'),
+  path('<int:pk>/password/', login_required(views.change_password,login_url='loginview'), name='password'),
 
   path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
   path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
