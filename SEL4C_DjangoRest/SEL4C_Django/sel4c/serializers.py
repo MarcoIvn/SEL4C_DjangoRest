@@ -27,7 +27,7 @@ class AdministratorSerializer(serializers.HyperlinkedModelSerializer):
 class EntrepreneurSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Entrepreneur
-        fields = ['username',
+        fields = [
                 'email',
                 'first_name',
                 'last_name',
