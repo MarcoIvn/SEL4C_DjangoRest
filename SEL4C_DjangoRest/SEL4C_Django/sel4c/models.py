@@ -84,7 +84,7 @@ class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     answer = models.IntegerField(default=0)
 
-    entrepreneur = models.ForeignKey(Entrepreneur_Data, on_delete=models.CASCADE, default=0)
+    entrepreneur = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
 
     def __str__(self) -> str:
         return f"{self.question_id}.{self.id}"
@@ -98,7 +98,7 @@ class File(models.Model):
     filetype = models.CharField(max_length=255)
 
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
-    entrepreneur = models.ForeignKey(Entrepreneur_Data, on_delete=models.CASCADE, default=0)
+    entrepreneur = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
 
     def __str__(self) -> str:
         return f"{self.id} ({self.activity_id})"
