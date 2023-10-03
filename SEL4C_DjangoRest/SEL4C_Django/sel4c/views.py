@@ -5,7 +5,7 @@ from rest_framework import permissions
 from rest_framework.response import Response
 import SEL4C_Django.sel4c.models as models
 import SEL4C_Django.sel4c.serializers as serializers
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.views import View
@@ -238,3 +238,31 @@ class registerUser(View):
           return render(request, 'sel4c/user/new.html', {"form": form})
       else:
         return redirect("home")
+      
+# UPDATE User
+def change_user(request):
+    if request.method == 'POST':
+        form = forms.ChangeUserForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, '¡Su perfil se ha actualizado!')
+            return redirect('home')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = forms.ChangeUserForm(instance=request.user)
+    return render(request, 'sel4c/user/change_user.html', {'form': form})
+
+def change_password(request, pk):
+    if request.method == 'POST':
+        form = forms.ChangePassword(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('profile')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = forms.ChangePassword(request.user)
+    return render(request, 'sel4c/user/change_password.html', {'form': form})
