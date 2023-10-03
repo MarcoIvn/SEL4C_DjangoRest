@@ -5,7 +5,7 @@ from rest_framework import permissions
 from rest_framework.response import Response
 import SEL4C_Django.sel4c.models as models
 import SEL4C_Django.sel4c.serializers as serializers
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.views import View
@@ -56,7 +56,7 @@ class HomeView(View):
             'activity_deliveries': [activity.deliveries for activity in activities],
         }
         print(context)
-        if request.user.is_authenticated:
+        if request.user.is_authenticated and request.user.is_staff:
             return render(request, "sel4c/index.html", context)
         else:
             messages.success(request, ("Necesita Iniciar Sesión"))
@@ -80,7 +80,7 @@ class EntrepreneurView(View):
         )
 
         context = {
-            'entrepreneur': users
+            'entrepreneur': user
         }
         print(context)
         if request.user.is_authenticated and entrepreneur.exists:
@@ -92,14 +92,14 @@ class EntrepreneurView(View):
 class LoginView(View):
     def get(self, request):
         if request.user.is_authenticated:
-            return redirect('home')
+          return redirect('home')
         return render(request, 'authentication/login.html', {})
 
     def post(self, request):
         username = request.POST["username"]
         password = request.POST["password"]
         user = authenticate(request, username=username, password=password)
-        if user is not None:
+        if user is not None and user.is_staff:
             login(request, user)
             return redirect('home')
         else:
@@ -198,27 +198,40 @@ class AnswerViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
-
 def registerAdministrator(request):
     if (request.method == 'POST'):
         form = forms.RegisterAdministratorForm(request.POST)
         if form.is_valid():
-            try:
-                form.save()
-            except:
-                messages.error(request, ("Error al crear usuario"))
-                return redirect('register')
-            else:
-                username = form.cleaned_data["username"]
-                password = form.cleaned_data["password1"]
-                user = authenticate(
-                    request, username=username, password=password)
-                if user is not None:
-                    login(request, user)
-                    messages.success(request, ("Usuario creado exitosamente"))
-                    return redirect('home')
+          try:
+            form.save()
+          except:
+            messages.error(request, ("Error al crear usuario"))
+            return redirect('register')
+          else:
+            username = form.cleaned_data["username"]
+            password = form.cleaned_data["password1"]
+            user = authenticate(
+            request, username=username, password=password)
+            if user is not None:
+              login(request, user)
+              messages.success(request, ("Usuario creado exitosamente"))
+              return redirect('home')
         else:
-            return render(request, 'sel4c/register_user.html', {"form": form})
+          return render(request, 'sel4c/user/new.html', {"form": form})
+      else:
+        return redirect("home")
+      
+# UPDATE User
+def change_user(request):
+    if request.method == 'POST':
+        form = forms.ChangeUserForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, '¡Su perfil se ha actualizado!')
+            return redirect('home')
+        else:
+            messages.error(request, 'Please correct the error below.')
     else:
         form = forms.RegisterAdministratorForm()
         return render(request, 'sel4c/register_user.html', {"form": form})
+

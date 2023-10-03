@@ -76,7 +76,6 @@ class Answer(models.Model):
 
 
 class File(models.Model):
-    id_file = models.BigAutoField(primary_key=True)
     file = models.FileField(upload_to='files/')
     filetype = models.CharField(max_length=255)
 
