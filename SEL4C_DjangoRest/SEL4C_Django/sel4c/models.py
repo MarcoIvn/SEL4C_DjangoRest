@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.hashers import make_password
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # Create your models here.
 
@@ -83,3 +85,20 @@ class File(models.Model):
         return f"{self.id} ({self.activity_id})"
     class Meta:
         app_label = 'sel4c'
+
+class ActivitiesCompleted(models.Model):
+    activity = models.ForeignKey(Activity,on_delete=models.CASCADE)
+    entrepreneur = models.ForeignKey(Entrepreneur,on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return f"{self.activity.activity_num} ({self.entrepreneur})"
+    class Meta:
+        app_label = 'sel4c'
+        verbose_name = "Activities Completed"
+        verbose_name_plural = "Activities Completed"
+
+@receiver(post_save, sender=ActivitiesCompleted)
+def update_deliveries(sender, instance, created, **kwargs):
+    if created:  
+        instance.activity.deliveries += 1
+        instance.activity.save()
