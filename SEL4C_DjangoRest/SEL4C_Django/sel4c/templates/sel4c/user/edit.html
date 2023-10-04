@@ -29,7 +29,7 @@
                         {% endif %}
                         
                         
-                        <form method="post" action="{% url 'register' %}">
+                        <form method="post" action="{% url 'edit_administrator' administrator.id %}">
                             {% csrf_token %}
                             <table>
                                 {{ form.as_table }}

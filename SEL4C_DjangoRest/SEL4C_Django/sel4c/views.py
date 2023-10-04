@@ -53,12 +53,16 @@ class EntrepreneurView(View):
     @method_decorator(staff_required)
     def get(self, request, id):
         # Use Subquery and OuterRef to perform a LEFT JOIN-like operation
-        entrepreneur = models.Entrepreneur.objects.filter(id = id)
+        entrepreneur = models.Entrepreneur.objects.get(id = id)
+        activities_completed = models.ActivitiesCompleted.objects.filter(entrepreneur=entrepreneur)
+        files_uploaded = models.File.objects.filter(entrepreneur=entrepreneur)
         context = {
-            'entrepreneur': entrepreneur
+            'entrepreneur': entrepreneur,
+            'activities_completed': activities_completed,
+            'files_uploaded': files_uploaded,
         }
         print(context)
-        if request.user.is_authenticated and entrepreneur.exists:
+        if request.user.is_authenticated:
             return render(request, "sel4c/entrepreneur/show.html", context)
         else:
             return render(request, "sel4c/index.html")
@@ -117,6 +121,13 @@ class EntrepreneurViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
+    def get_queryset(self):
+        queryset = models.Entrepreneur.objects.all()
+        email = self.request.query_params.get('email', None)
+        if email is not None:
+            queryset = queryset.filter(email=email)
+        return queryset
+# http://127.0.0.1:8000/api-root/entrepreneurs/?email=correo@ejemplo.com
 
 class ActivityViewSet(viewsets.ModelViewSet):
     """
@@ -201,14 +212,27 @@ class registerAdministrator(View):
 def editAdministrator(request,id):
     administrator = get_object_or_404(models.Administrator, id=id)
     if request.method == 'POST':
-        form = forms.RegisterAdministratorForm(request.POST, instance=administrator)
+        form = forms.ChangeAdministratorForm(request.POST, instance=administrator)
         if form.is_valid():
             form.save()
             messages.success(request, 'Administrador actualizado exitosamente.')
-            return redirect('home')  
+            return redirect('administrators')  
     else:
-        form = forms.RegisterAdministratorForm(instance=administrator)
-        return render(request, 'sel4c/user/edit.html', {"form": form, "administrator": administrator})
+        form = forms.ChangeAdministratorForm(instance=administrator)
+    return render(request, 'sel4c/user/edit.html', {"form": form, "administrator": administrator})
+
+@superuser_required
+def changeAdministratorPassword(request, id):
+    administrator = get_object_or_404(models.Administrator, id=id)
+    if request.method == 'POST':
+        form = forms.ChangeAdministratorPassword(administrator, request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Contraseña del administrador actualizada exitosamente.')
+            return redirect('administrators')  
+    else:
+        form = forms.ChangeAdministratorPassword(administrator)
+    return render(request, 'sel4c/user/change_password.html', {'form': form, 'administrator': administrator})
 
 @superuser_required
 def deleteAdministrator(request, id):
