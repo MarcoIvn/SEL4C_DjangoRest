@@ -56,10 +56,20 @@ class EntrepreneurView(View):
         entrepreneur = models.Entrepreneur.objects.get(id = id)
         activities_completed = models.ActivitiesCompleted.objects.filter(entrepreneur=entrepreneur)
         files_uploaded = models.File.objects.filter(entrepreneur=entrepreneur)
+
+        activity_questions = []
+        for activity_completed in activities_completed:
+            questions_with_answers = []
+            for question in activity_completed.activity.question_set.all():
+                answer = question.answer_set.filter(entrepreneur=entrepreneur).first()
+                questions_with_answers.append((question, answer))
+            activity_questions.append((activity_completed, questions_with_answers))
+
         context = {
             'entrepreneur': entrepreneur,
             'activities_completed': activities_completed,
             'files_uploaded': files_uploaded,
+            'activity_questions': activity_questions,
         }
         print(context)
         if request.user.is_authenticated:
