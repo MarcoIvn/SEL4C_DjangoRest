@@ -28,6 +28,7 @@ class EntrepreneurSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Entrepreneur
         fields = [
+                'id',
                 'email',
                 'first_name',
                 'last_name',
