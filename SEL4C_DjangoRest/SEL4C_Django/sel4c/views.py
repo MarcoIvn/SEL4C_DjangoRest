@@ -3,6 +3,7 @@ from django.db.models import OuterRef, Subquery
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.response import Response
+from rest_framework import status
 import SEL4C_Django.sel4c.models as models
 import SEL4C_Django.sel4c.serializers as serializers
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
@@ -118,11 +119,12 @@ class AdminViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
+from rest_framework import status
+
 class EntrepreneurViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Usuarios to be viewed or edited.
     """
-    # permission_classes = [permissions.IsAuthenticated]
     queryset = models.Entrepreneur.objects.all()
     serializer_class = serializers.EntrepreneurSerializer
 
@@ -137,6 +139,25 @@ class EntrepreneurViewSet(viewsets.ModelViewSet):
         if email is not None:
             queryset = queryset.filter(email=email)
         return queryset
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
+    def list(self, request, *args, **kwargs):
+        email = self.request.query_params.get('email', None)
+        if email is not None:
+            queryset = self.get_queryset()
+            if queryset.exists():
+                instance = queryset.first()
+                serializer = self.get_serializer(instance)
+                return Response(serializer.data)
+            else:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        else:
+            return super().list(request, *args, **kwargs)
+
 # http://127.0.0.1:8000/api-root/entrepreneurs/?email=correo@ejemplo.com
 
 class ActivityViewSet(viewsets.ModelViewSet):
