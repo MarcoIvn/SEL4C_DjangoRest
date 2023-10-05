@@ -130,6 +130,49 @@
                   </div>
               </div>
           {% endfor %}
+          <div>
+            <div class="card mb-4">
+              <div class="card-header">
+                  <i class="fas fa-table me-1"></i>
+                  Archivos Subidos
+              </div>
+              <div class="card-body">
+                  <table class="datatablesSimple">
+                      <thead>
+                          <tr>
+                              <th>Archivo</th>
+                              <th>Tipo de archivo</th>
+                              <th>Actividad</th>
+                          </tr>
+                      </thead>
+                      <tfoot>
+                          <tr>
+                            <th>Archivo</th>
+                            <th>Tipo de archivo</th>
+                            <th>Actividad</th>
+                          </tr>
+                      </tfoot>
+                      <tbody>
+                        {% for file in files_uploaded %}
+                          <tr>
+                            <td> <a href="{% url 'entrepreneur_page' entrepreneur.id %}"> {{ file.file }} </a></td>
+                            <td>{{ file.filetype }}</td>
+                            <td>
+                              {% with activity=file.activity %}
+                                {% if activity %}
+                                  {{ activity.activity_num }}
+                                {% else %}
+                                  No se encontró actividad
+                                {% endif %}
+                              {% endwith %}
+                            </td>
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+          </div>
       </div>      
     </div>
 </section>
