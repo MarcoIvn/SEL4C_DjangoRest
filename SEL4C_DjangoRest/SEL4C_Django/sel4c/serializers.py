@@ -30,6 +30,7 @@ class EntrepreneurSerializer(serializers.HyperlinkedModelSerializer):
         fields = [
                 'id',
                 'email',
+                'password',
                 'first_name',
                 'last_name',
                 'degree', 
