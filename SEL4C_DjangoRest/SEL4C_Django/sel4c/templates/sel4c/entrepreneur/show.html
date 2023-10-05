@@ -91,6 +91,46 @@
                 </div>
             </div>
         </div>
+        <div>
+          {% for activity, questions_with_answers in activity_questions %}
+              <div class="card mb-4">
+                  <div class="card-header">
+                      <i class="fas fa-table me-1"></i>
+                      Actividad {{ activity.activity.activity_num }}
+                  </div>
+                  <div class="card-body">
+                      <table class="datatablesSimple">
+                          <thead>
+                              <tr>
+                                  <th>Pregunta</th>
+                                  <th>Respuesta</th>
+                              </tr>
+                          </thead>
+                          <tfoot>
+                              <tr>
+                                  <th>Pregunta</th>
+                                  <th>Respuesta</th>
+                              </tr>
+                          </tfoot>
+                          <tbody>
+                              {% for question, answer in questions_with_answers %}
+                                  <tr>
+                                      <td>{{ question.description }}</td>
+                                      <td>
+                                          {% if answer %}
+                                              {{ answer.answer }}
+                                          {% else %}
+                                              Pregunta no respondida
+                                          {% endif %}
+                                      </td>
+                                  </tr>
+                              {% endfor %}
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
+          {% endfor %}
+      </div>      
     </div>
 </section>
   

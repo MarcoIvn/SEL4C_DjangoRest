@@ -65,7 +65,6 @@ class Question(models.Model):
 class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     answer = models.IntegerField(default=0)
-
     entrepreneur = models.ForeignKey(Entrepreneur, on_delete=models.CASCADE, default=0)
 
     def __str__(self) -> str:
