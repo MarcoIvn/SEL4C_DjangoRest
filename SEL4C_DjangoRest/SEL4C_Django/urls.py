@@ -13,7 +13,6 @@ router = routers.DefaultRouter()
 """ router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet) """
 
-router.register(r'admins', views.AdminViewSet)
 router.register(r'entrepreneurs', views.EntrepreneurViewSet)
 router.register(r'activities', views.ActivityViewSet)
 router.register(r'files', views.FileViewSet)
