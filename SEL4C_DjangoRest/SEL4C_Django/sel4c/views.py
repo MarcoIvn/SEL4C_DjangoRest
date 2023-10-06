@@ -9,6 +9,12 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.views import View
+<<<<<<< Updated upstream
+=======
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from .decorators import *
+from django.utils.decorators import method_decorator
+>>>>>>> Stashed changes
 from . import forms
 import json
 
@@ -210,9 +216,21 @@ class AnswerViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
+<<<<<<< Updated upstream
 def registerUser(request):
     if (request.method == 'POST'):
         form = forms.RegisterUserForm(request.POST)
+=======
+# CREATE Administrador
+class registerAdministrator(View):
+    @method_decorator(superuser_required)
+    def get(self,request):
+        form = forms.RegisterAdministratorForm()
+        return render(request, 'sel4c/user/new.html', {"form": form})
+    @method_decorator(superuser_required)
+    def post(self, request):
+        form = forms.RegisterAdministratorForm(request.POST)
+>>>>>>> Stashed changes
         if form.is_valid():
             try:
                 form.save()
@@ -229,7 +247,49 @@ def registerUser(request):
                     messages.success(request, ("Usuario creado exitosamente"))
                     return redirect('home')
         else:
+<<<<<<< Updated upstream
             return render(request, 'sel4c/register_user.html', {"form": form})
     else:
         form = forms.RegisterUserForm()
         return render(request, 'sel4c/register_user.html', {"form": form})
+=======
+          return render(request, 'sel4c/user/new.html', {"form": form})
+      
+# UPDATE Administrator
+@superuser_required
+def editAdministrator(request):
+    if request.method == 'POST':
+        form = forms.ChangeAdministratorForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, '¡Su perfil se ha actualizado!')
+            return redirect('home')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = forms.ChangeAdministratorForm(instance=request.user)
+    return render(request, 'sel4c/user/change_user.html', {'form': form})
+
+# UPDATE Administrator [Password]
+def changeAdministratorPassword(request, pk):
+    if request.method == 'POST':
+        form = forms.ChangeAdministratorPassword(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('profile')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = forms.ChangeAdministratorPassword(request.user)
+    return render(request, 'sel4c/user/change_password.html', {'form': form})
+
+# DELETE Administrator
+class AdministratorDeleteView(DeleteView):
+    model = models.Administrator
+    template_name = 'sel4c/user/deleteUser.html'
+    context_object_name = 'user'
+    success_url = '/profesores'
+
+>>>>>>> Stashed changes
