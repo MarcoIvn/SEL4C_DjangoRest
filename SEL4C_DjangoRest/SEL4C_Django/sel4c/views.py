@@ -195,6 +195,12 @@ class QuestionViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = models.Question.objects.all()
     serializer_class = serializers.QuestionSerializer
+    def get_queryset(self):
+        queryset = models.Question.objects.all()
+        activity_id = self.request.query_params.get('activity', None)
+        if activity_id is not None:
+            queryset = queryset.filter(activity__id=activity_id)
+        return queryset
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
