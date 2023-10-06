@@ -71,6 +71,7 @@ class Answer(models.Model):
         return f"{self.question_id}.{self.id}"
     class Meta:
         app_label = 'sel4c'
+        unique_together = ('question', 'entrepreneur')
 
 
 class File(models.Model):
