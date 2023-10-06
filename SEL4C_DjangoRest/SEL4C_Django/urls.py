@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.auth.decorators import login_required
 from django.urls import include, path
 from rest_framework import routers
 from SEL4C_Django.sel4c import views
@@ -12,7 +13,7 @@ router = routers.DefaultRouter()
 """ router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet) """
 
-router.register(r'usuarios', views.UserViewSet)
+router.register(r'admins', views.AdminViewSet)
 router.register(r'entrepreneurs', views.EntrepreneurViewSet)
 router.register(r'activities', views.ActivityViewSet)
 router.register(r'files', views.FileViewSet)
@@ -33,13 +34,17 @@ urlpatterns = [
   path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 
   path("home/",views.HomeView.as_view(), name= "home"),
-  path("users/<int:id>/", views.EntrepreneurView.as_view(), name= "user_page"),
+  path("entrepreneurs/<int:id>/", views.EntrepreneurView.as_view(), name= "entrepreneur_page"),
   #path('', include('django.contrib.auth.urls')),
   path('',views.LoginView.as_view(), name= "login"),
   path('logout', views.logoutView, name = "logout"),
-
-  path('register/', views.registerUser, name='register'),
-
+  path('home/administradores/registrar-administrador/', views.registerAdministrator.as_view(), name='register_administrator'),
+  path('eliminar-administrador/<int:id>/', views.deleteAdministrator, name='delete_administrator'),
+  path('home/administradores/editar-administrador/<int:id>/', views.editAdministrator, name='edit_administrator'),
+  path('home/administradores/', views.AdministratorsView.as_view(), name= 'administrators'),
+  path('home/administradores/<int:id>/', views.AdministratorView.as_view(), name= 'administrator'),
+  path('home/administradores/<int:id>/password/', views.changeAdministratorPassword, name='change_administrator_password'),
   path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
   path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
+  path('api/token/verify/', jwt_views.TokenVerifyView.as_view(), name='token_verify'),
 ]

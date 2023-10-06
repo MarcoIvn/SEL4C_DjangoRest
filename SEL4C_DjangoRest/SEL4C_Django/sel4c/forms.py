@@ -4,27 +4,27 @@ from django.contrib.auth.forms import PasswordChangeForm
 from .models import *
 from django import forms    
 
-class RegisterUserForm(UserCreationForm):
+class RegisterAdministratorForm(UserCreationForm):
     email = forms.EmailField()
     first_name = forms.CharField(max_length = 100)
     last_name = forms.CharField(max_length = 100)
     
     class Meta:
-        model = User
+        model = Administrator
         fields = ('username', 'first_name', 'last_name', 'email', 'password1','password2')
 
 
-class ChangeUserForm(UserChangeForm):
+class ChangeAdministratorForm(UserChangeForm):
     email = forms.EmailField()
     first_name = forms.CharField(max_length = 100)
     last_name = forms.CharField(max_length = 100)
 
     class Meta(UserChangeForm.Meta):
-        model = User
+        model = Administrator  
         fields = ('username', 'first_name', 'last_name', 'email')
 
 
-class ChangePassword(PasswordChangeForm):
+class ChangeAdministratorPassword(PasswordChangeForm):
     class Meta:
-        model = User
+        model = Administrator
         fields = ['old_password', 'new_password1', 'new_password2']
