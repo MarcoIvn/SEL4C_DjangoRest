@@ -1,20 +1,26 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.hashers import make_password
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # Create your models here.
 
-class User(AbstractUser):
-
-  is_entrepreneur = models.BooleanField(default=False)
-
-  def __str__(self):
-      return self.username 
-  class Meta:
+class Administrator(AbstractUser):
+    # Inherits id, username, password, first_name, last_name, is_staff, is_superuser
+    is_staff = models.BooleanField(default=True)
+    def __str__(self):
+        return self.username 
+    class Meta:
         verbose_name_plural = "Users"
 
 
-class Entrepreneur_Data(models.Model):
-    id = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE)
+class Entrepreneur(models.Model):
+    #username = models.CharField(primary_key=True, unique=True, default="N/A", max_length=40)
+    email = models.EmailField(unique=True, max_length=25)
+    password = models.CharField(max_length=255)
+    first_name = models.CharField(max_length=15)
+    last_name = models.CharField(max_length=15)
     degree = models.CharField(max_length=255)
     institution = models.CharField(max_length=255)
     gender = models.CharField(max_length=255)
@@ -23,39 +29,18 @@ class Entrepreneur_Data(models.Model):
     studyField = models.CharField(max_length=255)
 
     def __str__(self) -> str:
-        return f"{self.id}"
+        return f"{self.first_name} {self.last_name}"
 
     class Meta:
         app_label = 'sel4c'
-        verbose_name = "Entrepreneur's Data"
-        verbose_name_plural = "Entrepreneurs' Data"
-    
-    @classmethod
-    def create(cls, user_identifier, degree, institution, gender, age, country, studyField):
-        # Try to find the user by either username or id
-        try:
-            user = User.objects.get(username=user_identifier)
-        except User.DoesNotExist:
-            try:
-                user = User.objects.get(id=user_identifier)
-            except User.DoesNotExist:
-                raise Exception("User not found.")
+        verbose_name = "Entrepreneurs"
+        verbose_name_plural = "Entrepreneurs"
 
-        # Create or update Entrepreneur_Data instance
-        entrepreneur_data, created = cls.objects.get_or_create(id=user)
-        entrepreneur_data.degree = degree
-        entrepreneur_data.institution = institution
-        entrepreneur_data.gender = gender
-        entrepreneur_data.age = age
-        entrepreneur_data.country = country
-        entrepreneur_data.studyField = studyField
-        entrepreneur_data.save()
-
-        return entrepreneur_data
-    
-
+    def save(self, *args, **kwargs):
+        self.password = make_password(self.password)    
+        return super().save(*args, **kwargs)
+           
 class Activity(models.Model):
-    id_activity = models.BigAutoField(primary_key=True)
     activity_num = models.IntegerField(default=0)
     title = models.CharField(max_length=255)
     description = models.TextField()
@@ -66,9 +51,7 @@ class Activity(models.Model):
     class Meta:
         app_label = 'sel4c'
 
-
 class Question(models.Model):
-    id_question = models.BigAutoField(primary_key=True)
     question_num = models.IntegerField(default=0)
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
     description = models.TextField()
@@ -80,11 +63,9 @@ class Question(models.Model):
 
 
 class Answer(models.Model):
-    id_answer = models.BigAutoField(primary_key=True)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     answer = models.IntegerField(default=0)
-
-    entrepreneur = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
+    entrepreneur = models.ForeignKey(Entrepreneur, on_delete=models.CASCADE, default=0)
 
     def __str__(self) -> str:
         return f"{self.question_id}.{self.id}"
@@ -93,14 +74,30 @@ class Answer(models.Model):
 
 
 class File(models.Model):
-    id_file = models.BigAutoField(primary_key=True)
     file = models.FileField(upload_to='files/')
     filetype = models.CharField(max_length=255)
 
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
-    entrepreneur = models.ForeignKey(User, on_delete=models.CASCADE, default=0)
+    entrepreneur = models.ForeignKey(Entrepreneur, on_delete=models.CASCADE, default=0)
 
     def __str__(self) -> str:
         return f"{self.id} ({self.activity_id})"
     class Meta:
         app_label = 'sel4c'
+
+class ActivitiesCompleted(models.Model):
+    activity = models.ForeignKey(Activity,on_delete=models.CASCADE)
+    entrepreneur = models.ForeignKey(Entrepreneur,on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return f"{self.activity.activity_num} ({self.entrepreneur})"
+    class Meta:
+        app_label = 'sel4c'
+        verbose_name = "Activities Completed"
+        verbose_name_plural = "Activities Completed"
+
+@receiver(post_save, sender=ActivitiesCompleted)
+def update_deliveries(sender, instance, created, **kwargs):
+    if created:  
+        instance.activity.deliveries += 1
+        instance.activity.save()

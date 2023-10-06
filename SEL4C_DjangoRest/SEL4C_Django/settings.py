@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-68u71jikepj59e(mv5e&w%=sjvl25f$v5t2wm@h_#3!vy5stkr
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 #Rest Framework 
 REST_FRAMEWORK = {
@@ -138,7 +138,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'sel4c.User'
+AUTH_USER_MODEL = 'sel4c.Administrator'
 
 # Configuración de rutas estáticas
 STATIC_URL = '/static/'

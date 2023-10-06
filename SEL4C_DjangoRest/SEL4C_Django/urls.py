@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.auth.decorators import login_required
 from django.urls import include, path
 from rest_framework import routers
 from SEL4C_Django.sel4c import views
@@ -12,7 +13,7 @@ router = routers.DefaultRouter()
 """ router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet) """
 
-router.register(r'usuarios', views.UserViewSet)
+router.register(r'admins', views.AdminViewSet)
 router.register(r'entrepreneurs', views.EntrepreneurViewSet)
 router.register(r'activities', views.ActivityViewSet)
 router.register(r'files', views.FileViewSet)
@@ -55,18 +56,4 @@ urlpatterns = [
   path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
   # Redoc UI:
   path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
-<<<<<<< Updated upstream
-
-  path("home/",views.HomeView.as_view(), name= "home"),
-  path("users/<int:id>/", views.EntrepreneurView.as_view(), name= "user_page"),
-  #path('', include('django.contrib.auth.urls')),
-  path('',views.LoginView.as_view(), name= "login"),
-  path('logout', views.logoutView, name = "logout"),
-
-  path('register/', views.registerUser, name='register'),
-
-  path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
-  path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
-=======
->>>>>>> Stashed changes
 ]

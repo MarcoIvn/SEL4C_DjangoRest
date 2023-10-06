@@ -11,7 +11,7 @@ class CustomUserAdmin(UserAdmin):
 
     # campos
     fieldsets = (
-        (None, {'fields': ('username', 'email', 'password', 'first_name', 'last_name', 'is_entrepreneur')}),
+        (None, {'fields': ('username', 'email', 'password', 'first_name', 'last_name')}),
         ('Permissions', {'fields': ('is_superuser','user_permissions',)}),
     )
     
@@ -32,9 +32,10 @@ class CustomUserAdmin(UserAdmin):
 
 
 
-admin.site.register(models.Entrepreneur_Data)
-admin.site.register(models.User,CustomUserAdmin)
+admin.site.register(models.Entrepreneur)
+admin.site.register(models.Administrator,CustomUserAdmin)
 admin.site.register(models.Activity)
 admin.site.register(models.File)
 admin.site.register(models.Question)
 admin.site.register(models.Answer)
+admin.site.register(models.ActivitiesCompleted)
