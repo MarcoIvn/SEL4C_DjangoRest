@@ -27,8 +27,10 @@ class AdministratorSerializer(serializers.HyperlinkedModelSerializer):
 class EntrepreneurSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Entrepreneur
-        fields = ['username',
+        fields = [
+                'id',
                 'email',
+                'password',
                 'first_name',
                 'last_name',
                 'degree', 
@@ -51,6 +53,7 @@ class ActivitySerializer(serializers.HyperlinkedModelSerializer):
         
     
 class QuestionSerializer(serializers.HyperlinkedModelSerializer):
+    activity = serializers.PrimaryKeyRelatedField(queryset=models.Activity.objects.all())
     class Meta:
         model = models.Question
         fields = [
@@ -61,6 +64,8 @@ class QuestionSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class AnswerSerializer(serializers.HyperlinkedModelSerializer):
+    question = serializers.PrimaryKeyRelatedField(queryset=models.Question.objects.all())
+    entrepreneur = serializers.PrimaryKeyRelatedField(queryset=models.Entrepreneur.objects.all())
     class Meta:
         model = models.Answer
         fields = ['id',
@@ -70,6 +75,8 @@ class AnswerSerializer(serializers.HyperlinkedModelSerializer):
         
 
 class FileSerializer(serializers.HyperlinkedModelSerializer):
+    activity = serializers.PrimaryKeyRelatedField(queryset=models.Activity.objects.all())
+    entrepreneur = serializers.PrimaryKeyRelatedField(queryset=models.Entrepreneur.objects.all())
     class Meta:
         model = models.File
         fields = ['id',  

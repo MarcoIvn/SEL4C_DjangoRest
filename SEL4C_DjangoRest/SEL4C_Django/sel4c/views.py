@@ -3,87 +3,78 @@ from django.db.models import OuterRef, Subquery
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.response import Response
+from rest_framework import generics,status
 import SEL4C_Django.sel4c.models as models
 import SEL4C_Django.sel4c.serializers as serializers
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.views import View
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from .decorators import *
+from django.utils.decorators import method_decorator
 from . import forms
 import json
 
 
-""" class HomeView(View):
-    def get(self, request):
-        users = models.Administrator.objects.all()
-        entrepreneurs = models.Entrepreneur.objects.all()
-        qs = set()
-        qs.union(users, entrepreneurs)
-        activities = models.Activity.objects.all()
-
-        # activity_labels = [f"Actividad {activity.activity_num}" for activity in activities]
-        activity_labels = []
-        activity_deliveries = []
-        for activity in activities:
-            activity_labels.append(f"Actividad {activity.activity_num}")
-            activity_deliveries.append(f"{activity.deliveries}")
-        
-        context = {
-            'entrepreneurs': entrepreneurs,
-            'activity_labels': json.dumps(activity_labels),
-            'activity_deliveries': json.dumps(activity_deliveries)
-        }
-        print(context)
-
-        if request.user.is_authenticated:
-            return render(request, "sel4c/index.html", context)
-        else:
-            messages.success(request, ("Necesita Iniciar Sesión"))
-            return redirect('login')
- """
- 
 class HomeView(View):
+    @method_decorator(staff_required)
     def get(self, request):
-        
         entrepreneurs = models.Entrepreneur.objects.all()
-
         activities = models.Activity.objects.all()
-
-        # Create the context
         context = {
             'entrepreneurs': entrepreneurs,
             'activity_labels': [f"Actividad {activity.activity_num}" for activity in activities],
             'activity_deliveries': [activity.deliveries for activity in activities],
         }
         print(context)
-        if request.user.is_authenticated and request.user.is_staff:
-            return render(request, "sel4c/index.html", context)
-        else:
-            messages.success(request, ("Necesita Iniciar Sesión"))
-            return redirect('login')
+        return render(request, "sel4c/index.html", context)
+
+
+class AdministratorsView(View):
+    @method_decorator(superuser_required)
+    def get(self, request):
+        administrators = models.Administrator.objects.all()
+        context = { 'administrators': administrators}
+        return render(request, "sel4c/user/index.html", context)
+    
+  
+class AdministratorView(View):
+    @method_decorator(superuser_required)
+    def get(self, request, id):
+        administrator = models.Administrator.objects.filter(id = id)
+        context = { 'administrator': administrator}
+        print(context)
+        return render(request, "sel4c/user/show.html", context)
 
 
 
 class EntrepreneurView(View):
+    @method_decorator(staff_required)
     def get(self, request, id):
-        users = models.Administrator.objects.filter(is_entrepreneur=True)
-
         # Use Subquery and OuterRef to perform a LEFT JOIN-like operation
-        entrepreneur = models.Entrepreneur.objects.filter(id=OuterRef('id')).only('degree', 'institution', 'gender', 'age', 'country', 'studyField')
-        users = users.annotate(
-            degree=Subquery(entrepreneur.values('degree')[:1]),
-            institution=Subquery(entrepreneur.values('institution')[:1]),
-            gender=Subquery(entrepreneur.values('gender')[:1]),
-            age=Subquery(entrepreneur.values('age')[:1]),
-            country=Subquery(entrepreneur.values('country')[:1]),
-            studyField=Subquery(entrepreneur.values('studyField')[:1])
-        )
+        entrepreneur = models.Entrepreneur.objects.get(id = id)
+        activities_completed = models.ActivitiesCompleted.objects.filter(entrepreneur=entrepreneur)
+        files_uploaded = models.File.objects.filter(entrepreneur=entrepreneur)
+
+        activity_questions = []
+        for activity_completed in activities_completed:
+            questions_with_answers = []
+            for question in activity_completed.activity.question_set.all():
+                answer = question.answer_set.filter(entrepreneur=entrepreneur).first()
+                questions_with_answers.append((question, answer))
+            activity_questions.append((activity_completed, questions_with_answers))
 
         context = {
-            'entrepreneur': user
+            'entrepreneur': entrepreneur,
+            'activities_completed': activities_completed,
+            'files_uploaded': files_uploaded,
+            'activity_questions': activity_questions,
         }
         print(context)
-        if request.user.is_authenticated and entrepreneur.exists:
+        if request.user.is_authenticated:
             return render(request, "sel4c/entrepreneur/show.html", context)
         else:
             return render(request, "sel4c/index.html")
@@ -104,7 +95,7 @@ class LoginView(View):
             return redirect('home')
         else:
             messages.success(
-                request, ("Nombre de usuario o contraseña incorrectos, Intentelo de nuevo"))
+            request, ("Nombre de usuario o contraseña incorrectos, Intentelo de nuevo"))
             return redirect('login')
 
 
@@ -129,11 +120,12 @@ class AdminViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
+from rest_framework import status
+
 class EntrepreneurViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Usuarios to be viewed or edited.
     """
-    # permission_classes = [permissions.IsAuthenticated]
     queryset = models.Entrepreneur.objects.all()
     serializer_class = serializers.EntrepreneurSerializer
 
@@ -142,6 +134,32 @@ class EntrepreneurViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
+    def get_queryset(self):
+        queryset = models.Entrepreneur.objects.all()
+        email = self.request.query_params.get('email', None)
+        if email is not None:
+            queryset = queryset.filter(email=email)
+        return queryset
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
+    def list(self, request, *args, **kwargs):
+        email = self.request.query_params.get('email', None)
+        if email is not None:
+            queryset = self.get_queryset()
+            if queryset.exists():
+                instance = queryset.first()
+                serializer = self.get_serializer(instance)
+                return Response(serializer.data)
+            else:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        else:
+            return super().list(request, *args, **kwargs)
+
+# http://127.0.0.1:8000/api-root/entrepreneurs/?email=correo@ejemplo.com
 
 class ActivityViewSet(viewsets.ModelViewSet):
     """
@@ -178,6 +196,12 @@ class QuestionViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     queryset = models.Question.objects.all()
     serializer_class = serializers.QuestionSerializer
+    def get_queryset(self):
+        queryset = models.Question.objects.all()
+        activity_id = self.request.query_params.get('activity', None)
+        if activity_id is not None:
+            queryset = queryset.filter(activity__id=activity_id)
+        return queryset
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
@@ -198,8 +222,30 @@ class AnswerViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
-def registerAdministrator(request):
-    if (request.method == 'POST'):
+class CreateMultipleAnswersView(generics.CreateAPIView):
+    serializer_class = serializers.AnswerSerializer
+    queryset = models.Answer.objects.all()  # Agrega esta línea
+
+    def create(self, request, *args, **kwargs):
+        answer_data = request.data.get('answers', [])
+        created_answers = []
+
+        for answer_item in answer_data:
+            serializer = self.get_serializer(data=answer_item)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+            created_answers.append(serializer.data)
+
+        headers = self.get_success_headers(created_answers)
+        return Response(created_answers, status=status.HTTP_201_CREATED, headers=headers)
+
+class registerAdministrator(View):
+    @method_decorator(superuser_required)
+    def get(self,request):
+        form = forms.RegisterAdministratorForm()
+        return render(request, 'sel4c/user/new.html', {"form": form})
+    @method_decorator(superuser_required)
+    def post(self, request):
         form = forms.RegisterAdministratorForm(request.POST)
         if form.is_valid():
           try:
@@ -208,23 +254,18 @@ def registerAdministrator(request):
             messages.error(request, ("Error al crear usuario"))
             return redirect('register')
           else:
-            username = form.cleaned_data["username"]
-            password = form.cleaned_data["password1"]
-            user = authenticate(
-            request, username=username, password=password)
-            if user is not None:
-              login(request, user)
-              messages.success(request, ("Usuario creado exitosamente"))
-              return redirect('home')
-        else:
-          return render(request, 'sel4c/user/new.html', {"form": form})
-      else:
-        return redirect("home")
+            #username = form.cleaned_data["username"]
+            #password = form.cleaned_data["password1"]
+            messages.success(request, ("Usuario creado exitosamente"))
+            return redirect('home')
+        else: 
+            return render(request, 'sel4c/user/new.html', {"form": form})
       
-# UPDATE User
-def change_user(request):
+# UPDATE Administrator
+@superuser_required
+def editAdministrator(request):
     if request.method == 'POST':
-        form = forms.ChangeUserForm(request.POST, instance=request.user)
+        form = forms.ChangeAdministratorForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
             messages.success(request, '¡Su perfil se ha actualizado!')
@@ -232,6 +273,27 @@ def change_user(request):
         else:
             messages.error(request, 'Please correct the error below.')
     else:
-        form = forms.RegisterAdministratorForm()
-        return render(request, 'sel4c/register_user.html', {"form": form})
+        form = forms.ChangeAdministratorForm(instance=request.user)
+    return render(request, 'sel4c/user/change_user.html', {'form': form})
 
+# UPDATE Administrator [Password]
+def changeAdministratorPassword(request, pk):
+    if request.method == 'POST':
+        form = forms.ChangeAdministratorPassword(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('profile')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = forms.ChangeAdministratorPassword(request.user)
+    return render(request, 'sel4c/user/change_password.html', {'form': form})
+
+# DELETE Administrator
+class AdministratorDeleteView(DeleteView):
+    model = models.Administrator
+    template_name = 'sel4c/user/deleteUser.html'
+    context_object_name = 'user'
+    success_url = '/profesores'
