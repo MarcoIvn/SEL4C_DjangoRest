@@ -3,7 +3,7 @@ from django.db.models import OuterRef, Subquery
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.response import Response
-from rest_framework import generics, status
+from rest_framework import status
 import SEL4C_Django.sel4c.models as models
 import SEL4C_Django.sel4c.serializers as serializers
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
@@ -220,22 +220,6 @@ class AnswerViewSet(viewsets.ModelViewSet):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
-    
-class BulkAnswerCreateView(generics.CreateAPIView):
-    serializer_class = serializers.BulkAnswerSerializer
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            answers_data = serializer.validated_data.get('answers', [])
-            created_answers = []
-            for answer_data in answers_data:
-                answer_serializer = serializers.AnswerSerializer(data=answer_data)
-                if answer_serializer.is_valid():
-                    answer_serializer.save()
-                    created_answers.append(answer_serializer.data)
-            return Response({'created_answers': created_answers}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class registerAdministrator(View):
