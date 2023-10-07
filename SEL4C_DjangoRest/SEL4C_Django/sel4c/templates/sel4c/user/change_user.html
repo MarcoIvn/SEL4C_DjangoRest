@@ -6,7 +6,7 @@
         <div class="card shadow mb-4">
             <!-- Card Header - Dropdown -->
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h3 class="m-0 font-weight-bold text-primary">Actualizar contraseña</h3>
+                <h3 class="m-0 font-weight-bold text-primary">Actualizar datos de ususario</h3>
             </div>
         </div>
     </div>
@@ -21,21 +21,21 @@
                     <div class="col mr-2">
                         <!-- Form error messages -->
                         {% if form.errors %}
-                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                                Ocurrieron errores:
-                                {{ form.errors }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            Ocurrieron errores:
+                            {{ form.errors }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
                         {% endif %}
-                        
-                        
-                        <form method="post" action="{% url 'password' pk=request.user.id %}">
+
+
+                        <form method="post" action="{% url 'profile' %}">
                             {% csrf_token %}
                             <table>
                                 {{ form.as_table }}
                             </table>
-                            
-                            <button type="submit" class="btn btn-primary">Guardar contraseña</button>
+
+                            <button type="submit" class="btn btn-primary">Guardar usuario</button>
                         </form>
                     </div>
                 </div>
@@ -43,6 +43,12 @@
         </div>
     </div>
 </div>
+<br>
+<div class="row">
+    <div class="col-xl col-md-6">
+        <a href="{% url 'home' %}" class="btn btn-info" role="button" aria-pressed="true">Volver</a>
+        <a href="{% url 'delete_administrator' user.id %}" class="btn btn-danger" role="button" aria-pressed="true"><i class="fas fa-fw fa-exclamation-triangle"></i>  Eliminar</a>
+    </div>
+</div>
 
-    
 {% endblock %}
