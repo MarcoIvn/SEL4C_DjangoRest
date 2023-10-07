@@ -72,8 +72,6 @@ class AnswerSerializer(serializers.HyperlinkedModelSerializer):
                 'question', 
                 'answer', 
                 'entrepreneur'] 
-class BulkAnswerSerializer(serializers.Serializer):
-    answers = AnswerSerializer(many=True)
         
 
 class FileSerializer(serializers.HyperlinkedModelSerializer):

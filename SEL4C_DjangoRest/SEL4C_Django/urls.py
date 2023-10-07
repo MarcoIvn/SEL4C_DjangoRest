@@ -32,7 +32,6 @@ urlpatterns = [
   path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
   # Redoc UI:
   path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
-  path('api/answers/bulk-create/', views.BulkAnswerCreateView.as_view(), name='bulk-answer-create'),
 
   path("home/",views.HomeView.as_view(), name= "home"),
   path("entrepreneurs/<int:id>/", views.EntrepreneurView.as_view(), name= "entrepreneur_page"),
