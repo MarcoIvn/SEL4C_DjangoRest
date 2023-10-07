@@ -26,6 +26,14 @@ urlpatterns = [
   path('api-auth/', include('rest_framework.urls', namespace= 'rest_framework')),
   path("admin/", admin.site.urls),
   
+  #OpenApi
+  path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+  # Swagger UI:
+  path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+  # Redoc UI:
+  path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+  path('api/answers/create-multiple/', views.CreateMultipleAnswersView.as_view(), name='create-multiple-answers'),
+
   path("home/",views.HomeView.as_view(), name= "home"),
 
   path('',views.LoginView.as_view(), name= "login"),
