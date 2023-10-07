@@ -1,0 +1,47 @@
+{% extends extends "sel4c/base.html" %}
+{% block content %}
+
+<div class="row">
+  <div class="col-xl col-md-6 mb-1">
+    <div class="card shadow mb-4">
+      <!-- Card Header - Dropdown -->
+      <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h3 class="m-0 font-weight-bold text-primary">¿Eliminar usuario {{user.username}}?</h3>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row justify-content-start">
+<!-- Area Chart -->
+<div class="col-3 col-md-6 mb-4">
+    <div class="card shadow mb-4">
+      <!-- Card Header - Dropdown -->
+      <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">Preste Atención:</h6>
+      </div>
+      <!-- Card Body -->
+      <div class="card-body">
+        <div class="alert alert-danger" role="alert">
+          ¡ATENCIÓN!: Pulsar este botón eliminará todos los datos asociados al usuario {{user.username}}.
+        </div>
+        <form action="" method="post">
+          {% csrf_token %}
+          <p><strong> No es posible recuperar los datos asociados posteriormente. </strong></p>
+          <p>¿Desea eliminar el usuario? </p>
+          <button type="submit" class="btn btn-danger">Lo entiendo y quiero eliminar a mi usuario <strong>{{user.username}}</strong></button>
+        </form>
+        <br>
+        <a href="{% url 'profile' %}" class="btn btn-info" role="button" aria-pressed="true">Volver</a>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+  {% endblock %}

@@ -12,6 +12,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.views import View
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .decorators import *
 from django.utils.decorators import method_decorator
 from . import forms
@@ -241,40 +242,42 @@ class registerAdministrator(View):
             #password = form.cleaned_data["password1"]
             messages.success(request, ("Usuario creado exitosamente"))
             return redirect('home')
-        else:
-          return render(request, 'sel4c/user/new.html', {"form": form})
+        else: 
+            return render(request, 'sel4c/user/new.html', {"form": form})
       
-# UPDATE User
+# UPDATE Administrator
 @superuser_required
-def editAdministrator(request,id):
-    administrator = get_object_or_404(models.Administrator, id=id)
+def editAdministrator(request):
     if request.method == 'POST':
-        form = forms.ChangeAdministratorForm(request.POST, instance=administrator)
+        form = forms.ChangeAdministratorForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Administrador actualizado exitosamente.')
-            return redirect('administrators')  
+            messages.success(request, '¡Su perfil se ha actualizado!')
+            return redirect('home')
+        else:
+            messages.error(request, 'Please correct the error below.')
     else:
-        form = forms.ChangeAdministratorForm(instance=administrator)
-    return render(request, 'sel4c/user/edit.html', {"form": form, "administrator": administrator})
+        form = forms.ChangeAdministratorForm(instance=request.user)
+    return render(request, 'sel4c/user/change_user.html', {'form': form})
 
-@superuser_required
-def changeAdministratorPassword(request, id):
-    administrator = get_object_or_404(models.Administrator, id=id)
+# UPDATE Administrator [Password]
+def changeAdministratorPassword(request, pk):
     if request.method == 'POST':
-        form = forms.ChangeAdministratorPassword(administrator, request.POST)
+        form = forms.ChangeAdministratorPassword(request.user, request.POST)
         if form.is_valid():
-            form.save()
-            messages.success(request, 'Contraseña del administrador actualizada exitosamente.')
-            return redirect('administrators')  
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('profile')
+        else:
+            messages.error(request, 'Please correct the error below.')
     else:
-        form = forms.ChangeAdministratorPassword(administrator)
-    return render(request, 'sel4c/user/change_password.html', {'form': form, 'administrator': administrator})
+        form = forms.ChangeAdministratorPassword(request.user)
+    return render(request, 'sel4c/user/change_password.html', {'form': form})
 
-@superuser_required
-def deleteAdministrator(request, id):
-    administrator = get_object_or_404(models.Administrator, id=id)
-    administrator.delete()
-    messages.success(request, 'Administrador eliminado exitosamente.')
-    return redirect('administrators')  
-
+# DELETE Administrator
+class AdministratorDeleteView(DeleteView):
+    model = models.Administrator
+    template_name = 'sel4c/user/deleteUser.html'
+    context_object_name = 'user'
+    success_url = '/profesores'
