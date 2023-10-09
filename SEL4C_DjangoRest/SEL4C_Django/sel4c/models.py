@@ -63,6 +63,7 @@ class Question(models.Model):
 
 
 class Answer(models.Model):
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, default=0)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     answer = models.IntegerField(default=0)
     entrepreneur = models.ForeignKey(Entrepreneur, on_delete=models.CASCADE, default=0)
