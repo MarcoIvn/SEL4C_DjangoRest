@@ -237,6 +237,12 @@ class ActivitiesCompletedViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
+    def get_queryset(self):
+        entrepreneur_id = self.request.query_params.get('entrepreneur')
+        if entrepreneur_id:
+            return models.ActivitiesCompleted.objects.filter(entrepreneur=entrepreneur_id)
+        return models.ActivitiesCompleted.objects.all()
+
 
 class CreateMultipleAnswersView(generics.CreateAPIView):
     serializer_class = serializers.AnswerSerializer
