@@ -77,3 +77,9 @@ class FileSerializer(serializers.ModelSerializer):
                 'filetype',
                 'activity',
                 'entrepreneur']
+        
+
+class ActivitiesCompletedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.ActivitiesCompleted
+        fields = ['id','activity','entrepreneur']
