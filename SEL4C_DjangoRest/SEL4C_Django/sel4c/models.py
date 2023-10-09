@@ -97,6 +97,7 @@ class ActivitiesCompleted(models.Model):
         app_label = 'sel4c'
         verbose_name = "Activities Completed"
         verbose_name_plural = "Activities Completed"
+        unique_together = ['activity', 'entrepreneur']
 
 @receiver(post_save, sender=ActivitiesCompleted)
 def update_deliveries(sender, instance, created, **kwargs):
