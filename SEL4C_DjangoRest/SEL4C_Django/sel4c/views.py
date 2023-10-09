@@ -313,6 +313,42 @@ class AdministratorDeleteView(DeleteView):
     success_url = '/profile/'
 
 
+
+# UPDATE User
+@superuser_required
+def editOneAdministrator(request,id):
+    administrator = get_object_or_404(models.Administrator, id=id)
+    if request.method == 'POST':
+        form = forms.ChangeAdministratorForm(request.POST, instance=administrator)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Administrador actualizado exitosamente.')
+            return redirect('administrators')  
+    else:
+        form = forms.ChangeAdministratorForm(instance=administrator)
+    return render(request, 'sel4c/user/edit.html', {"form": form, "administrator": administrator})
+
+@superuser_required
+def changeOneAdministratorPassword(request, id):
+    administrator = get_object_or_404(models.Administrator, id=id)
+    if request.method == 'POST':
+        form = forms.ChangeAdministratorPassword(administrator, request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Contraseña del administrador actualizada exitosamente.')
+            return redirect('administrators')  
+    else:
+        form = forms.ChangeAdministratorPassword(administrator)
+    return render(request, 'sel4c/user/change_one_password.html', {'form': form, 'administrator': administrator})
+
+@superuser_required
+def deleteOneAdministrator(request, id):
+    administrator = get_object_or_404(models.Administrator, id=id)
+    administrator.delete()
+    messages.success(request, 'Administrador eliminado exitosamente.')
+    return redirect('administrators')
+
+
 def download_file(request, file_id):
     # Retrieve the File object from the database based on the file_id
     file_obj = get_object_or_404(models.File, id=file_id)

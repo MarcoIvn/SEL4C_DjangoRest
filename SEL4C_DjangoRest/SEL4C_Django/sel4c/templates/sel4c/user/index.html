@@ -20,13 +20,16 @@
             <th>Nombre</th>
             <th>Email</th>
             <th>Last Login</th>
+            <th>Acciones</th>
             
           </tr>
         </thead>
         <tfoot>
           <tr>
             <th>Nombre</th>
+            <th>Email</th>
             <th>Last Login</th>
+            <th>Acciones</th>
           </tr>
         </tfoot>
         <tbody>
@@ -35,7 +38,10 @@
             <td> <a href="{% url 'administrator' administrator.id %}">{{ administrator.first_name }} {{administrator.last_name}} </a></td>
             <td>{{ administrator.email }}</td>
             <td>{{ administrator.last_login }}</td>
-            
+            <td>
+              <a href="{% url 'edit_one_administrator' administrator.id %}" class="btn btn-primary btn-sm">Editar</a>
+              <a onclick="return confirm('Are you sure you want to delete this?')" href="{% url 'delete_one_administrator' administrator.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+            </td>
           </tr>
           {% endfor %}
         </tbody>
