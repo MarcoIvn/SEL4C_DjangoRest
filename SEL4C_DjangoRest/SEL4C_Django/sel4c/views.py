@@ -1,6 +1,5 @@
 from rest_framework import viewsets
 from rest_framework import permissions
-from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -33,7 +32,7 @@ class HomeView(View):
         }
         print(context)
         return render(request, "sel4c/index.html", context)
-
+    
 
 class AdministratorsView(View):
     @method_decorator(superuser_required)
@@ -46,7 +45,7 @@ class AdministratorsView(View):
 class AdministratorView(View):
     @method_decorator(superuser_required)
     def get(self, request, id):
-        administrator = models.Administrator.objects.filter(id = id)
+        administrator = models.Administrator.objects.filter(id=id)
         context = { 'administrator': administrator}
         print(context)
         return render(request, "sel4c/user/show.html", context)
@@ -99,7 +98,7 @@ class LoginView(View):
             messages.success(
             request, ("Nombre de usuario o contraseña incorrectos, Intentelo de nuevo"))
             return redirect('login')
-
+   
 
 def logoutView(request):
     logout(request)
@@ -120,7 +119,6 @@ class AdminViewSet(viewsets.ModelViewSet):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
-
 
 
 class EntrepreneurViewSet(viewsets.ModelViewSet):
@@ -285,7 +283,6 @@ class registerAdministrator(View):
             return render(request, 'sel4c/user/new.html', {"form": form})
       
 # UPDATE Administrator
-@superuser_required
 def editAdministrator(request):
     if request.method == 'POST':
         form = forms.ChangeAdministratorForm(request.POST, instance=request.user)
@@ -319,7 +316,7 @@ class AdministratorDeleteView(DeleteView):
     model = models.Administrator
     template_name = 'sel4c/user/deleteUser.html'
     context_object_name = 'user'
-    success_url = '/profesores'
+    success_url = '/profile/'
 
 
 def download_file(request, file_id):
