@@ -222,6 +222,21 @@ class AnswerViewSet(viewsets.ModelViewSet):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+    
+
+class ActivitiesCompletedViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows Respuestas to be viewed or edited.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = models.ActivitiesCompleted.objects.all()
+    serializer_class = serializers.ActivitiesCompletedSerializer
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
 
 class CreateMultipleAnswersView(generics.CreateAPIView):
     serializer_class = serializers.AnswerSerializer

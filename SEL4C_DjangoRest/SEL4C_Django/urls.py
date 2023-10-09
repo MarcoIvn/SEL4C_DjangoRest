@@ -18,6 +18,7 @@ router.register(r'activities', views.ActivityViewSet)
 router.register(r'files', views.FileViewSet)
 router.register(r'questions', views.QuestionViewSet)
 router.register(r'answers', views.AnswerViewSet)
+router.register(r'completed-acts', views.ActivitiesCompletedViewSet)
 
 
 urlpatterns = [
