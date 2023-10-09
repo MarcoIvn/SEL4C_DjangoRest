@@ -14,53 +14,26 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 class AdministratorSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Administrator
-        fields = ['id',
-                'username',
-                'email',
-                'password',
-                'first_name', 
-                'last_name',
-                'is_staff',
-                'is_superuser']
+        fields = '__all__'
 
 
 class EntrepreneurSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Entrepreneur
-        fields = [
-                'id',
-                'email',
-                'password',
-                'first_name',
-                'last_name',
-                'degree', 
-                'institution', 
-                'gender', 
-                'age', 
-                'country', 
-                'studyField']
+        fields = '__all__'
         
 
 class ActivitySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Activity
-        fields = [
-                'id',
-                'activity_num', 
-                'title', 
-                'description', 
-                'deliveries']
+        fields = '__all__'
         
     
 class QuestionSerializer(serializers.HyperlinkedModelSerializer):
     activity = serializers.PrimaryKeyRelatedField(queryset=models.Activity.objects.all())
     class Meta:
         model = models.Question
-        fields = [
-                'id',
-                'question_num', 
-                'activity', 
-                'description']
+        fields = '__all__'
 
 
 class AnswerSerializer(serializers.HyperlinkedModelSerializer):
@@ -68,19 +41,10 @@ class AnswerSerializer(serializers.HyperlinkedModelSerializer):
     entrepreneur = serializers.PrimaryKeyRelatedField(queryset=models.Entrepreneur.objects.all())
     class Meta:
         model = models.Answer
-        fields = ['id',
-                'question', 
-                'answer', 
-                'entrepreneur'] 
+        fields = '__all__'
         
 
-class FileSerializer(serializers.HyperlinkedModelSerializer):
-    activity = serializers.PrimaryKeyRelatedField(queryset=models.Activity.objects.all())
-    entrepreneur = serializers.PrimaryKeyRelatedField(queryset=models.Entrepreneur.objects.all())
+class FileSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.File
-        fields = ['id',  
-                'file', 
-                'filetype',
-                'activity',
-                'entrepreneur']
+        fields = '__all__'

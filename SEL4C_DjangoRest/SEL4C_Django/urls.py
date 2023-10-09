@@ -63,4 +63,5 @@ urlpatterns = [
   path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
   # Redoc UI:
   path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+  path('file/<int:file_id>/', views.download_file, name='download-file')
 ]
