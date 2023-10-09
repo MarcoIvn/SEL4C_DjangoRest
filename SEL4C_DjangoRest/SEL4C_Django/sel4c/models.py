@@ -86,6 +86,7 @@ class File(models.Model):
     class Meta:
         app_label = 'sel4c'
 
+
 class ActivitiesCompleted(models.Model):
     activity = models.ForeignKey(Activity,on_delete=models.CASCADE)
     entrepreneur = models.ForeignKey(Entrepreneur,on_delete=models.CASCADE)

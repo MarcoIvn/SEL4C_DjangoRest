@@ -1,12 +1,14 @@
-from django.contrib.auth.models import User, Group
-from django.db.models import OuterRef, Subquery
 from rest_framework import viewsets
 from rest_framework import permissions
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework import status
 from rest_framework import generics,status
 import SEL4C_Django.sel4c.models as models
 import SEL4C_Django.sel4c.serializers as serializers
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.http import FileResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -58,7 +60,7 @@ class EntrepreneurView(View):
         entrepreneur = models.Entrepreneur.objects.get(id = id)
         activities_completed = models.ActivitiesCompleted.objects.filter(entrepreneur=entrepreneur)
         files_uploaded = models.File.objects.filter(entrepreneur=entrepreneur)
-
+        print(files_uploaded)
         activity_questions = []
         for activity_completed in activities_completed:
             questions_with_answers = []
@@ -120,7 +122,6 @@ class AdminViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-from rest_framework import status
 
 class EntrepreneurViewSet(viewsets.ModelViewSet):
     """
@@ -239,6 +240,7 @@ class CreateMultipleAnswersView(generics.CreateAPIView):
         headers = self.get_success_headers(created_answers)
         return Response(created_answers, status=status.HTTP_201_CREATED, headers=headers)
 
+
 class registerAdministrator(View):
     @method_decorator(superuser_required)
     def get(self,request):
@@ -297,3 +299,17 @@ class AdministratorDeleteView(DeleteView):
     template_name = 'sel4c/user/deleteUser.html'
     context_object_name = 'user'
     success_url = '/profesores'
+
+
+def download_file(request, file_id):
+    # Retrieve the File object from the database based on the file_id
+    file_obj = get_object_or_404(models.File, id=file_id)
+
+    # Open the file and create a FileResponse to serve it for download
+    file_path = file_obj.file.path
+    response = FileResponse(open(file_path, 'rb'))
+
+    # Set the Content-Disposition header to specify the filename
+    response['Content-Disposition'] = f'attachment; filename="{file_obj.file.name}"'
+
+    return response

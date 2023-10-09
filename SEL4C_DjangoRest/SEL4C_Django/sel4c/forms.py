@@ -21,7 +21,7 @@ class ChangeAdministratorForm(UserChangeForm):
 
     class Meta(UserChangeForm.Meta):
         model = Administrator  
-        fields = ('username', 'first_name', 'last_name', 'email')
+        fields = ('username', 'first_name', 'last_name', 'email', 'is_active')
 
 
 class ChangeAdministratorPassword(PasswordChangeForm):
