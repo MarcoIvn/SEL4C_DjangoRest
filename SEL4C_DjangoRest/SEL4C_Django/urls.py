@@ -46,6 +46,10 @@ urlpatterns = [
 
   path('profile/', login_required(views.editAdministrator), name='profile' ),
   
+  path('eliminar-administrador/<int:id>/', views.deleteOneAdministrator, name='delete_one_administrator'),
+  path('home/administradores/editar-administrador/<int:id>/', views.editOneAdministrator, name='edit_one_administrator'),
+  path('home/administradores/<int:id>/password/', views.changeOneAdministratorPassword, name='change_one_administrator_password'),
+  
   path('home/administradores/', login_required(views.AdministratorsView.as_view(), login_url='login'), name= 'administrators'),
   path('home/administradores/<int:id>/', login_required(views.AdministratorView.as_view(), login_url='login'), name= 'administrator'),
 
