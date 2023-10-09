@@ -28,8 +28,8 @@ class HomeView(View):
         activities = models.Activity.objects.all()
         context = {
             'entrepreneurs': entrepreneurs,
-            'activity_labels': [f"Actividad {activity.activity_num}" for activity in activities],
-            'activity_deliveries': [activity.deliveries for activity in activities],
+            'activity_labels': json.dumps([f"Actividad {activity.activity_num}" for activity in activities]),
+            'activity_deliveries': json.dumps([activity.deliveries for activity in activities]),
         }
         print(context)
         return render(request, "sel4c/index.html", context)
