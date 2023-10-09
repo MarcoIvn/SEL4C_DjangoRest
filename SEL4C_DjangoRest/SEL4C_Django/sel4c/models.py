@@ -16,7 +16,6 @@ class Administrator(AbstractUser):
 
 
 class Entrepreneur(models.Model):
-    #username = models.CharField(primary_key=True, unique=True, default="N/A", max_length=40)
     email = models.EmailField(unique=True, max_length=25)
     password = models.CharField(max_length=255)
     first_name = models.CharField(max_length=15)
