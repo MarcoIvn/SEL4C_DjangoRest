@@ -35,7 +35,6 @@ urlpatterns = [
   path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
   path('api/answers/create-multiple/', views.CreateMultipleAnswersView.as_view(), name='create-multiple-answers'),
 
-  path("home/",views.HomeView.as_view(), name= "home"),
 
   path('',views.LoginView.as_view(), name= "login"),
   path('logout', views.logoutView, name = "logout"),
@@ -50,6 +49,8 @@ urlpatterns = [
   path('home/administradores/editar-administrador/<int:id>/', views.editOneAdministrator, name='edit_one_administrator'),
   path('home/administradores/<int:id>/password/', views.changeOneAdministratorPassword, name='change_one_administrator_password'),
   
+  path("home/",views.HomeView.as_view(), name= "home"),
+
   path('home/administradores/', login_required(views.AdministratorsView.as_view(), login_url='login'), name= 'administrators'),
   path('home/administradores/<int:id>/', login_required(views.AdministratorView.as_view(), login_url='login'), name= 'administrator'),
 
@@ -66,5 +67,11 @@ urlpatterns = [
   path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
   # Redoc UI:
   path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
-  path('file/<int:file_id>/', views.download_file, name='download-file')
+  
+  path('file/<int:file_id>/', views.download_file, name='download-file'),
+
+  path('files/', views.fileList, name='files'),
+  path('entrepreneurs/', views.listOfEntrepreneurs, name='entrepreneurs_list'),
+  path('activities/',views.ActivityList, name='activities'),
+  path('activities/create', views.ActivityCreateView.as_view(), name='create_activity'),
 ]

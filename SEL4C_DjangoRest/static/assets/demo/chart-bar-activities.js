@@ -9,7 +9,7 @@ var activity_deliveries = ctx.getAttribute("data-data")
 
 activity_labels = JSON.parse(activity_labels);
 activity_deliveries = JSON.parse(activity_deliveries);
-var myLineChart = new Chart(ctx, {
+var myChart = new Chart(ctx, {
   type: 'bar',
   data: {
     labels: activity_labels,

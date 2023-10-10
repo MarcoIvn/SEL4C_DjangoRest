@@ -1,113 +1,120 @@
 {% extends "sel4c/base.html" %}
 {% block content %}
 <div class="container-fluid px-4">
-  <h1 class="mt-4">Dashboard</h1>
-  <ol class="breadcrumb mb-4">
-      <li class="breadcrumb-item active">Página principal</li>
-  </ol>
-  <div class="row">   
-      <div class="col-xl-3 col-md-6">
-          <div class="card bg-primary text-white mb-4">
-              <div class="card-body">Usuarios creados: {{entrepreneurs.count}}</div>
-              <div class="card-footer d-flex align-items-center justify-content-between">
-                  <a class="small text-white stretched-link" href="#">View Details</a>
-                  <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-              </div>
-          </div>
-      </div>
-      <div class="col-xl-3 col-md-6">
-          <div class="card bg-warning text-white mb-4">
-              <div class="card-body">Cursos finalizados: </div>
-              <div class="card-footer d-flex align-items-center justify-content-between">
-                  <a class="small text-white stretched-link" href="#">View Details</a>
-                  <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-              </div>
-          </div>
-      </div>
-      <div class="col-xl-3 col-md-6">
-          <div class="card bg-success text-white mb-4">
-              <div class="card-body">Success Card</div>
-              <div class="card-footer d-flex align-items-center justify-content-between">
-                  <a class="small text-white stretched-link" href="#">View Details</a>
-                  <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-              </div>
-          </div>
-      </div>
-      <div class="col-xl-3 col-md-6">
-          <div class="card bg-danger text-white mb-4">
-              <div class="card-body">Danger Card</div>
-              <div class="card-footer d-flex align-items-center justify-content-between">
-                  <a class="small text-white stretched-link" href="#">View Details</a>
-                  <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-              </div>
-          </div>
-      </div>
-  </div>
-  <div class="row">
-      <div class="col-xl-6">
-          <div class="card mb-4">
-              <div class="card-header">
-                  <i class="fas fa-chart-area me-1"></i>
-                  Grafica de
-              </div>
-              <div class="card-body"><canvas id="myChart" width="100%" height="40" data-labels="{{activity_labels}}" data-data="{{activity_deliveries}}"></canvas></div>
-          </div>
-      </div>
-      <div class="col-xl-6">
-          <div class="card mb-4">
-              <div class="card-header">
-                  <i class="fas fa-chart-bar me-1"></i>
-                  Grafica de Actividades
-              </div>
-              <div class="card-body"><canvas id="myBarChart" width="100%" height="40" data-labels="{{activity_labels}}" data-data="{{activity_deliveries}}"></canvas></div>
-          </div>
-      </div>
-  </div>
-  <div class="card mb-4">
-      <div class="card-header">
-          <i class="fas fa-table me-1"></i>
-          Emprendedores
-      </div>
-      <div class="card-body">
-          <table class="datatablesSimple">
-              <thead>
-                  <tr>
-                      <th>Name</th>
-                      <th>Grado</th>
-                      <th>Institución</th>
-                      <th>Género</th>
-                      <th>Edad</th>
-                      <th>País</th>
-                      <th>Campo de estudio</th>
-                  </tr>
-              </thead>
-              <tfoot>
-                  <tr>
-                      <th>Name</th>
-                      <th>Grado</th>
-                      <th>Institución</th>
-                      <th>Género</th>
-                      <th>Edad</th>
-                      <th>País</th>
-                      <th>Campo de estudio</th>
-                  </tr>
-              </tfoot>
-              <tbody>
-                {% for entrepreneur in entrepreneurs %}
-                  <tr>
-                    <td> <a href="{% url 'entrepreneur_page' entrepreneur.id %}"> {{ entrepreneur.first_name }} {{entrepreneur.last_name}} </a></td>
-                    <td>{{ entrepreneur.degree }}</td>
-                    <td>{{ entrepreneur.institution }}</td>
-                    <td>{{ entrepreneur.gender }}</td>
-                    <td>{{ entrepreneur.age }}</td>
-                    <td>{{ entrepreneur.country }}</td>
-                    <td>{{ entrepreneur.studyField }}</td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-          </table>
-      </div>
-  </div>
+    <h1 class="mt-4">Dashboard</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">Página principal</li>
+    </ol>
+    <div class="row">
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-primary text-white mb-4">
+                <div class="card-body">Emprendedores creados: {{entrepreneurs.count}}</div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white stretched-link" href="{% url 'entrepreneurs_list' %}">View Details</a>
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-warning text-white mb-4">
+                <div class="card-body">Archivos subidos: {{files_num}}</div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white stretched-link" href="{% url 'files' %}">View Details</a>
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-success text-white mb-4">
+                <div class="card-body">Actividades Completadas: {{acts_comp_num}}</div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white stretched-link" href="#">View Details</a>
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-danger text-white mb-4">
+                <div class="card-body">Danger Card</div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white stretched-link" href="#">View Details</a>
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Emprendedores
+        </div>
+        <div class="card-body">
+            <table class="datatablesSimple">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Grado</th>
+                        <th>Institución</th>
+                        <th>Género</th>
+                        <th>Edad</th>
+                        <th>País</th>
+                        <th>Campo de estudio</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Name</th>
+                        <th>Grado</th>
+                        <th>Institución</th>
+                        <th>Género</th>
+                        <th>Edad</th>
+                        <th>País</th>
+                        <th>Campo de estudio</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    {% for entrepreneur in entrepreneurs %}
+                    <tr>
+                        <td> <a href="{% url 'entrepreneur_page' entrepreneur.id %}"> {{ entrepreneur.first_name }}
+                                {{entrepreneur.last_name}} </a></td>
+                        <td>{{ entrepreneur.degree }}</td>
+                        <td>{{ entrepreneur.institution }}</td>
+                        <td>{{ entrepreneur.gender }}</td>
+                        <td>{{ entrepreneur.age }}</td>
+                        <td>{{ entrepreneur.country }}</td>
+                        <td>{{ entrepreneur.studyField }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xl-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-chart-area me-1"></i>
+                    Gráfica de Actividades
+                </div>
+                <div class="card-body"><canvas id="myBarChart" width="100%" height="40"
+                        data-labels="{{activity_labels}}" data-data="{{activity_deliveries}}"></canvas></div>
+            </div>
+        </div>
+        <div class="col-xl-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-chart-bar me-1"></i>
+                    Gráfica de Edades
+                </div>
+                <div class="card-body"><canvas id="myChart" width="100%" height="40" data-labels="{{activity_labels}}"
+                        data-data="{{activity_deliveries}}"></canvas></div>
+            </div>
+        </div>
+    </div>
+
+    
 </div>
 {% endblock %}
-
