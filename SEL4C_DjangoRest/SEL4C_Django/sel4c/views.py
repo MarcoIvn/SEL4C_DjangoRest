@@ -12,7 +12,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.views import View
-from django.views.generic.edit import CreateView, DeleteView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .decorators import *
 from django.utils.decorators import method_decorator
 from . import forms
@@ -401,7 +401,7 @@ def listOfEntrepreneurs(request):
     return render(request, 'sel4c/entrepreneur/index.html', ctx)
 
 
-def ActivityList(request): #########################################################
+def activityList(request): #########################################################
     activities = models.Activity.objects.all()
     ctx = {'activities': activities}
     return render(request, 'sel4c/activities/index.html', ctx)
@@ -411,4 +411,11 @@ class ActivityCreateView(CreateView):
     model = models.Activity
     template_name = 'sel4c/activities/create-edit.html'
     fields = '__all__'
-    success_url = '/home'
+    success_url = '/activities'
+
+
+class ActivityUpdateView(UpdateView):
+    model = models.Activity
+    template_name = 'sel4c/activities/create-edit.html'
+    fields = '__all__'
+    success_url = '/activities'

@@ -70,8 +70,9 @@ urlpatterns = [
   
   path('file/<int:file_id>/', views.download_file, name='download-file'),
 
-  path('files/', views.fileList, name='files'),
-  path('entrepreneurs/', views.listOfEntrepreneurs, name='entrepreneurs_list'),
-  path('activities/',views.ActivityList, name='activities'),
-  path('activities/create', views.ActivityCreateView.as_view(), name='create_activity'),
+  path('files/', login_required(views.fileList, login_url='login'), name='files'),
+  path('entrepreneurs/', login_required(views.listOfEntrepreneurs, login_url='login'), name='entrepreneurs_list'),
+  path('activities/',login_required(views.activityList, login_url='login'), name='activities'),
+  path('activities/<int:pk>', login_required(views.ActivityUpdateView.as_view(), login_url='login'), name='update_activity'),
+  path('activities/create', login_required(views.ActivityCreateView.as_view(), login_url='login'), name='create_activity'),
 ]
