@@ -1,0 +1,60 @@
+{% extends "sel4c/base.html" %}
+
+{% block content %}
+<div class="container-fluid px-4">
+
+  <h1 class="mt-4">Emprendedores</h1>
+  <ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item active">Emprendedores de SEL4C activos(as)</li>
+  </ol>
+  </h1>
+
+  <div class="card mb-4">
+    <div class="card-header">
+      <i class="fas fa-table me-1"></i>
+      Emprendedores
+    </div>
+    <div class="card-body">
+      <table class="datatablesSimple">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Grado</th>
+            <th>Institución</th>
+            <th>Género</th>
+            <th>Edad</th>
+            <th>País</th>
+            <th>Campo de estudio</th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <th>Name</th>
+            <th>Grado</th>
+            <th>Institución</th>
+            <th>Género</th>
+            <th>Edad</th>
+            <th>País</th>
+            <th>Campo de estudio</th>
+          </tr>
+        </tfoot>
+        <tbody>
+          {% for entrepreneur in entrepreneurs %}
+          <tr>
+            <td> <a href="{% url 'entrepreneur_page' entrepreneur.id %}"> {{ entrepreneur.first_name }}
+                {{entrepreneur.last_name}} </a></td>
+            <td>{{ entrepreneur.degree }}</td>
+            <td>{{ entrepreneur.institution }}</td>
+            <td>{{ entrepreneur.gender }}</td>
+            <td>{{ entrepreneur.age }}</td>
+            <td>{{ entrepreneur.country }}</td>
+            <td>{{ entrepreneur.studyField }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

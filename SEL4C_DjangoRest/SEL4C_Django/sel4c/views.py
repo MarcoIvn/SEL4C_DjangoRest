@@ -1,7 +1,6 @@
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework import generics,status
 import SEL4C_Django.sel4c.models as models
@@ -24,9 +23,13 @@ class HomeView(View):
     @method_decorator(staff_required)
     def get(self, request):
         entrepreneurs = models.Entrepreneur.objects.all()
+        files_num = models.File.objects.count()
+        acts_comp_num = models.ActivitiesCompleted.objects.count()
         activities = models.Activity.objects.all()
         context = {
             'entrepreneurs': entrepreneurs,
+            'files_num':files_num,
+            'acts_comp_num':acts_comp_num,
             'activity_labels': json.dumps([f"Actividad {activity.activity_num}" for activity in activities]),
             'activity_deliveries': json.dumps([activity.deliveries for activity in activities]),
         }
@@ -49,7 +52,6 @@ class AdministratorView(View):
         context = { 'administrator': administrator}
         print(context)
         return render(request, "sel4c/user/show.html", context)
-
 
 
 class EntrepreneurView(View):
@@ -106,6 +108,20 @@ def logoutView(request):
     return redirect('login')
 
 
+class AdminViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows Usuarios to be viewed or edited.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = models.Administrator.objects.all()
+    serializer_class = serializers.AdministratorSerializer
+
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+    
 class AdminViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Usuarios to be viewed or edited.
@@ -319,7 +335,6 @@ class AdministratorDeleteView(DeleteView):
     success_url = '/profile/'
 
 
-
 # UPDATE User
 @superuser_required
 def editOneAdministrator(request,id):
@@ -367,3 +382,40 @@ def download_file(request, file_id):
     response['Content-Disposition'] = f'attachment; filename="{file_obj.file.name}"'
 
     return response
+
+
+def fileList(request): 
+    files = models.File.objects.all()
+    ctx = {
+        'files':files}
+    print(ctx)
+    return render(request, 'sel4c/files/index.html', ctx)
+
+
+def listOfEntrepreneurs(request): 
+    entrepreneurs = models.Entrepreneur.objects.all()
+    ctx = {
+        'entrepreneurs':entrepreneurs
+    }
+    print(ctx)
+    return render(request, 'sel4c/entrepreneur/index.html', ctx)
+
+
+def activityList(request): #########################################################
+    activities = models.Activity.objects.all()
+    ctx = {'activities': activities}
+    return render(request, 'sel4c/activities/index.html', ctx)
+
+
+class ActivityCreateView(CreateView):
+    model = models.Activity
+    template_name = 'sel4c/activities/create-edit.html'
+    fields = '__all__'
+    success_url = '/activities'
+
+
+class ActivityUpdateView(UpdateView):
+    model = models.Activity
+    template_name = 'sel4c/activities/create-edit.html'
+    fields = '__all__'
+    success_url = '/activities'

@@ -1,0 +1,48 @@
+{% extends "sel4c/base.html" %}
+
+{% block content %}
+<div class="container-fluid px-4">
+  
+  <h1 class="mt-4">Archivos</h1>
+  <ol class="breadcrumb mb-4">
+      <li class="breadcrumb-item active">Lista de Archivos</li>
+    </ol>
+  </h1>
+  <div class="card mb-4">
+    <div class="card-header">
+      <i class="fas fa-table me-1"></i>
+      Files
+    </div>
+    <div class="card-body">
+      <table class="datatablesSimple">
+        <thead>
+          <tr>
+            <th>Emprendedor</th>
+            <th>Actividad</th>
+            <th>Entrega</th>
+            
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <th>Emprendedor</th>
+            <th>Actividad</th>
+            <th>Entrega</th>
+    
+          </tr>
+        </tfoot>
+        <tbody>
+          {% for file in files %}
+          <tr>
+            <td>{{ file.entrepreneur }} </a></td>
+            <td>{{ file.activity }} </a></td>
+            <td><a href="{% url 'download-file' file.id %}"> {{ file.file }} </a></td>
+            
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
