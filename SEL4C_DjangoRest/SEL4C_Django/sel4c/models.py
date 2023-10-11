@@ -88,6 +88,8 @@ class File(models.Model):
 
 
 class ActivitiesCompleted(models.Model):
+    is_completed = models.BooleanField(default=False)
+    attempts = models.SmallIntegerField(default=3)
     activity = models.ForeignKey(Activity,on_delete=models.CASCADE)
     entrepreneur = models.ForeignKey(Entrepreneur,on_delete=models.CASCADE)
 
@@ -98,9 +100,3 @@ class ActivitiesCompleted(models.Model):
         verbose_name = "Activities Completed"
         verbose_name_plural = "Activities Completed"
         unique_together = ['activity', 'entrepreneur']
-
-@receiver(post_save, sender=ActivitiesCompleted)
-def update_deliveries(sender, instance, created, **kwargs):
-    if created:  
-        instance.activity.deliveries += 1
-        instance.activity.save()

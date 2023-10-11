@@ -9,12 +9,13 @@ var activity_deliveries = ctx.getAttribute("data-data")
 
 activity_labels = JSON.parse(activity_labels);
 activity_deliveries = JSON.parse(activity_deliveries);
+
 var myChart = new Chart(ctx, {
   type: 'bar',
   data: {
     labels: activity_labels,
     datasets: [{
-      label: "Entregables",
+      label: "Actividades Entregadas",
       backgroundColor: "rgba(90,34,139,1)",
       borderColor:  "rgba(90,34,139,1)",
       data: activity_deliveries
@@ -36,7 +37,7 @@ var myChart = new Chart(ctx, {
       yAxes: [{
         ticks: {
           min: 0,
-          max: 500,
+          
           maxTicksLimit: 5
         },
         gridLines: {

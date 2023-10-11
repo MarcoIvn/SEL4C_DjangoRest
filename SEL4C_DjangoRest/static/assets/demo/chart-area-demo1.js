@@ -6,6 +6,7 @@ Chart.defaults.global.defaultFontColor = '#292b2c';
 var ctx = document.getElementById("myAreaChart");
 var activity_labels = ctx.getAttribute("data-labels");
 var activity_deliveries = ctx.getAttribute("data-data")
+
 activity_labels = JSON.parse(activity_labels);
 activity_deliveries = JSON.parse(activity_deliveries);
 
@@ -14,7 +15,7 @@ var myLineChart = new Chart(ctx, {
   data: {
     labels: activity_labels,
     datasets: [{
-      label: "Entregables",
+      label: "Actividades Entregadas",
       lineTension: 0.3,
       backgroundColor: "rgba(213,184,255,1)",
       borderColor: "rgba(159,90,253,1)",
@@ -44,7 +45,7 @@ var myLineChart = new Chart(ctx, {
       yAxes: [{
         ticks: {
           min: 0,
-          max: 500,
+          
           maxTicksLimit: 5
         },
         gridLines: {

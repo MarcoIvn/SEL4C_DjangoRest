@@ -13,9 +13,10 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .decorators import *
 from django.utils.decorators import method_decorator
+from django.db.models import Count, Max
 from . import forms
+from .decorators import *
 import json
 
 
@@ -24,15 +25,22 @@ class HomeView(View):
     def get(self, request):
         entrepreneurs = models.Entrepreneur.objects.all()
         files_num = models.File.objects.count()
-        acts_comp_num = models.ActivitiesCompleted.objects.count()
-        activities = models.Activity.objects.all()
+        # Count the number of completed activities for each activity
+        activity_counts = models.Activity.objects.annotate(num_completed=Count('activitiescompleted')).values('activity_num', 'num_completed')
+        
+        # Create a dictionary with activity labels and corresponding completion counts
+        activity_data = {f"Actividad {activity['activity_num']}": activity['num_completed'] for activity in activity_counts}
+        
+        # Prepare data for the Chartjs graph
+        activity_labels = list(activity_data.keys())
+        activities_completed = list(activity_data.values())
+
         context = {
             'entrepreneurs': entrepreneurs,
             'files_num':files_num,
-            'acts_comp_num':acts_comp_num,
-            'activity_labels': json.dumps([f"Actividad {activity.activity_num}" for activity in activities]),
-            'activity_deliveries': json.dumps([activity.deliveries for activity in activities]),
-        }
+            'activity_labels': json.dumps(activity_labels),
+            'activities_completed': json.dumps(activities_completed),
+        }   
         print(context)
         return render(request, "sel4c/index.html", context)
     
@@ -61,7 +69,14 @@ class EntrepreneurView(View):
         entrepreneur = models.Entrepreneur.objects.get(id = id)
         activities_completed = models.ActivitiesCompleted.objects.filter(entrepreneur=entrepreneur)
         files_uploaded = models.File.objects.filter(entrepreneur=entrepreneur)
-        print(files_uploaded)
+        # Count the number of completed activities for each activity
+        activity_counts = models.Activity.objects.filter(activitiescompleted__entrepreneur=entrepreneur).annotate(num_completed=Count('activitiescompleted')).values('activity_num', 'num_completed')
+        # Create a dictionary with activity labels and corresponding completion counts
+        activity_data = {f"Actividad {activity['activity_num']}": activity['num_completed'] for activity in activity_counts}
+        # Prepare data for the Chartjs graph
+        activity_labels = list(activity_data.keys())
+        activities_completed_list = list(activity_data.values())
+
         activity_questions = []
         for activity_completed in activities_completed:
             questions_with_answers = []
@@ -75,6 +90,9 @@ class EntrepreneurView(View):
             'activities_completed': activities_completed,
             'files_uploaded': files_uploaded,
             'activity_questions': activity_questions,
+            'activity_labels': json.dumps(activity_labels),
+            'activities_completed_list': json.dumps(activities_completed_list),
+            'activities_completed': activities_completed,
         }
         print(context)
         if request.user.is_authenticated:
@@ -104,7 +122,7 @@ class LoginView(View):
 
 def logoutView(request):
     logout(request)
-    messages.success(request, ("Sesión Cerrada Correctamente, bye!!!"))
+    messages.success(request, ("Sesión Cerrada Correctamente, hasta pronto."))
     return redirect('login')
 
 
@@ -122,6 +140,7 @@ class AdminViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
     
+
 class AdminViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Usuarios to be viewed or edited.
@@ -395,8 +414,7 @@ def fileList(request):
 def listOfEntrepreneurs(request): 
     entrepreneurs = models.Entrepreneur.objects.all()
     ctx = {
-        'entrepreneurs':entrepreneurs
-    }
+        'entrepreneurs':entrepreneurs}
     print(ctx)
     return render(request, 'sel4c/entrepreneur/index.html', ctx)
 
