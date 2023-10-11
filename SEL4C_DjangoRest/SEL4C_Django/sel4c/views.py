@@ -31,7 +31,7 @@ class HomeView(View):
         
         # Create a dictionary with activity labels and corresponding completion counts
         activity_data = {f"Actividad {activity['activity_num']}": activity['num_completed'] for activity in activity_counts}
-        recent_actions = LogEntry.objects.all().order_by('-action_time')[:10]  # Obtiene las últimas 10 acciones
+        recent_actions = LogEntry.objects.all().order_by('-action_time')  
         # Prepare data for the Chartjs graph
         activity_labels = list(activity_data.keys())
         activities_completed = list(activity_data.values())
