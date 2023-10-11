@@ -88,7 +88,6 @@ class File(models.Model):
 
 
 class ActivitiesCompleted(models.Model):
-    is_completed = models.BooleanField(default=False)
     attempts = models.SmallIntegerField(default=3)
     activity = models.ForeignKey(Activity,on_delete=models.CASCADE)
     entrepreneur = models.ForeignKey(Entrepreneur,on_delete=models.CASCADE)
