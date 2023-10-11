@@ -6,6 +6,7 @@ from rest_framework import generics,status
 import SEL4C_Django.sel4c.models as models
 import SEL4C_Django.sel4c.serializers as serializers
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.admin.models import LogEntry
 from django.http import FileResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.shortcuts import render, redirect
@@ -30,7 +31,7 @@ class HomeView(View):
         
         # Create a dictionary with activity labels and corresponding completion counts
         activity_data = {f"Actividad {activity['activity_num']}": activity['num_completed'] for activity in activity_counts}
-        
+        recent_actions = LogEntry.objects.all().order_by('-action_time')[:10]  # Obtiene las últimas 10 acciones
         # Prepare data for the Chartjs graph
         activity_labels = list(activity_data.keys())
         activities_completed = list(activity_data.values())
@@ -40,6 +41,7 @@ class HomeView(View):
             'files_num':files_num,
             'activity_labels': json.dumps(activity_labels),
             'activities_completed': json.dumps(activities_completed),
+            'recent_actions': recent_actions,
         }   
         print(context)
         return render(request, "sel4c/index.html", context)
