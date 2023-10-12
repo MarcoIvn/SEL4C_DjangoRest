@@ -1,15 +1,33 @@
-from django.contrib.auth.models import User, Group
 import SEL4C_Django.sel4c.models as models
-from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 from rest_framework.response import Response
 
+from django.contrib.contenttypes.models import ContentType
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+from django.contrib.admin.models import LogEntry
 """ 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Group
         fields = ['url', 'name']
  """
+@receiver(pre_save, sender=models.Entrepreneur)  # Reemplaza YourModel con el modelo que deseas rastrear
+def log_action(sender, instance, **kwargs):
+    content_type = ContentType.objects.get_for_model(instance)
+    
+    if instance._state.adding:
+        action_flag = 1  # 1 para adición
+    else:
+        action_flag = 2  # 2 para modificación
+
+    LogEntry.objects.log_action(
+        user_id=1,  # Reemplaza instance.user.id con el usuario que realizó la acción
+        content_type_id=content_type.id,
+        object_id=instance.pk,
+        object_repr=str(instance),
+        action_flag=action_flag
+    )
 
 class AdministratorSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
