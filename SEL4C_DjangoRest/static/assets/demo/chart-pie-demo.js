@@ -4,12 +4,17 @@ Chart.defaults.global.defaultFontColor = '#292b2c';
 
 // Pie Chart Example
 var ctx = document.getElementById("myPieChart");
+var gender_labels = ctx.getAttribute("data-labels");
+var gender_data = ctx.getAttribute("data-data")
+
+gender_labels = JSON.parse(gender_labels);
+gender_data = JSON.parse(gender_data);
 var myPieChart = new Chart(ctx, {
   type: 'pie',
   data: {
-    labels: ["Blue", "Red", "Yellow", "Green"],
+    labels: gender_labels,
     datasets: [{
-      data: [12.21, 15.58, 11.25, 8.32],
+      data: gender_data,
       backgroundColor: ['#007bff', '#dc3545', '#ffc107', '#28a745'],
     }],
   },
