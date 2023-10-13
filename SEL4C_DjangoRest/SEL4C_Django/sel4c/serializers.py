@@ -82,4 +82,4 @@ class FileSerializer(serializers.ModelSerializer):
 class ActivitiesCompletedSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.ActivitiesCompleted
-        fields = ['id','activity','entrepreneur']
+        fields = ['id','activity','entrepreneur','attempts']
