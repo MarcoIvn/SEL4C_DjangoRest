@@ -16,13 +16,15 @@ class Administrator(AbstractUser):
 
 
 class Entrepreneur(models.Model):
+    GENDER_CHOICES = [("Masculino","Masculino"), ("Femenino","Femenino"), ("No binario","No binario"), ("Prefiero no decirlo","Prefiero no decirlo")]
+    
     email = models.EmailField(unique=True, max_length=25)
     password = models.CharField(max_length=255)
     first_name = models.CharField(max_length=15)
     last_name = models.CharField(max_length=15)
     degree = models.CharField(max_length=255)
     institution = models.CharField(max_length=255)
-    gender = models.CharField(max_length=255)
+    gender = models.CharField(max_length=255, choices=GENDER_CHOICES)
     age = models.IntegerField()
     country = models.CharField(max_length=255)
     studyField = models.CharField(max_length=255)
@@ -39,8 +41,11 @@ class Entrepreneur(models.Model):
         self.password = make_password(self.password)    
         return super().save(*args, **kwargs)
            
+
 class Activity(models.Model):
-    activity_num = models.IntegerField(default=0)
+    ACTIVITY_CHOICES = [(1,1),(2,2),(3,3),(4,4),(5,5),(6,6),(7,7)]
+
+    activity_num = models.IntegerField(choices=ACTIVITY_CHOICES, unique=True)
     title = models.CharField(max_length=255)
     description = models.TextField()
     deliveries = models.IntegerField(default=0)
@@ -88,8 +93,7 @@ class File(models.Model):
 
 
 class ActivitiesCompleted(models.Model):
-    is_completed = models.BooleanField(default=False)
-    attempts = models.SmallIntegerField(default=3)
+    attempts = models.SmallIntegerField(default=1)
     activity = models.ForeignKey(Activity,on_delete=models.CASCADE)
     entrepreneur = models.ForeignKey(Entrepreneur,on_delete=models.CASCADE)
 

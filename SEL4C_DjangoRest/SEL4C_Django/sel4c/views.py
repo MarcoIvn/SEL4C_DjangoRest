@@ -28,7 +28,7 @@ class HomeView(View):
         files_num = models.File.objects.count()
         # Count the number of completed activities for each activity
         activity_counts = models.Activity.objects.annotate(num_completed=Count('activitiescompleted')).values('activity_num', 'num_completed')
-        
+        acts_comp_num = models.ActivitiesCompleted.objects.count()
         # Create a dictionary with activity labels and corresponding completion counts
         activity_data = {f"Actividad {activity['activity_num']}": activity['num_completed'] for activity in activity_counts}
         recent_actions = LogEntry.objects.all().order_by('-action_time')  
@@ -36,12 +36,29 @@ class HomeView(View):
         activity_labels = list(activity_data.keys())
         activities_completed = list(activity_data.values())
 
+        # Query to get the count of Entrepreneurs for each gender
+        gender_counts = models.Entrepreneur.objects.values('gender').annotate(count=Count('gender'))
+
+        total_entrepreneurs = models.Entrepreneur.objects.count()
+
+        gender_labels = []
+        gender_data = []
+
+        for item in gender_counts:
+            gender = item['gender']
+            count = item['count']
+            percentage = (count / total_entrepreneurs) * 100
+            gender_labels.append(gender)
+            gender_data.append(round(percentage, 2))
         context = {
             'entrepreneurs': entrepreneurs,
             'files_num':files_num,
             'activity_labels': json.dumps(activity_labels),
             'activities_completed': json.dumps(activities_completed),
             'recent_actions': recent_actions,
+            'gender_data': json.dumps(gender_data),
+            'gender_labels': json.dumps(gender_labels),
+            'acts_comp_num':acts_comp_num,
         }   
         print(context)
         return render(request, "sel4c/index.html", context)
@@ -78,14 +95,24 @@ class EntrepreneurView(View):
         # Prepare data for the Chartjs graph
         activity_labels = list(activity_data.keys())
         activities_completed_list = list(activity_data.values())
-
+        
+        activity_to_file = {}
+        for activity_completed in activities_completed:
+            # Assuming there is a ForeignKey relationship from Activity to File
+            activity = activity_completed.activity
+            associated_file = activity.file_set.filter(entrepreneur=entrepreneur).first()
+            activity_to_file[activity] = associated_file
+        
         activity_questions = []
         for activity_completed in activities_completed:
             questions_with_answers = []
+            files = []
             for question in activity_completed.activity.question_set.all():
                 answer = question.answer_set.filter(entrepreneur=entrepreneur).first()
                 questions_with_answers.append((question, answer))
-            activity_questions.append((activity_completed, questions_with_answers))
+            for file in activity_completed.activity.file_set.all():
+                files.append(file)
+            activity_questions.append((activity_completed, questions_with_answers, files))
 
         context = {
             'entrepreneur': entrepreneur,
@@ -95,8 +122,8 @@ class EntrepreneurView(View):
             'activity_labels': json.dumps(activity_labels),
             'activities_completed_list': json.dumps(activities_completed_list),
             'activities_completed': activities_completed,
+            'activity_to_file': activity_to_file,
         }
-        print(context)
         if request.user.is_authenticated:
             return render(request, "sel4c/entrepreneur/show.html", context)
         else:

@@ -79,7 +79,8 @@
         </div>
         
         <div>
-            {% for activity, questions_with_answers in activity_questions %}
+            {% for activity, questions_with_answers, files in activity_questions %}
+            {% if questions_with_answers %}
             <div class="card mb-4">
                 <div class="card-header">
                     <i class="fas fa-table me-1"></i>
@@ -100,23 +101,61 @@
                             </tr>
                         </tfoot>
                         <tbody>
+                                                        
                             {% for question, answer in questions_with_answers %}
                             <tr>
+                                {{ activity_file.file }}
                                 <td>{{ question.description }}</td>
-                                <td>
+                                <td>  
                                     {% if answer %}
                                     {{ answer.answer }}
                                     {% else %}
                                     Pregunta no respondida
-                                    {% endif %}
-                                </td>
+                                    {% endif %}                                    
+                                </td>                                
                             </tr>
                             {% endfor %}
                         </tbody>
                       </table>
                   </div>
               </div>
-              {% endfor %}
+            {% elif files%}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-table me-1"></i>
+                    Actividad {{ activity.activity.activity_num }}
+                </div>
+                <div class="card-body">
+                    <table class="datatablesSimple">
+                        <thead>
+                            <tr>
+                                <th>Archivo</th>
+                                
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Archivo</th>
+                            </tr>
+                        </tfoot>
+                        <tbody>                             
+                            {% for file in files %}
+                            <tr>
+                                <td>  
+                                    {% if file %}
+                                    <a href="{% url 'download-file' file.id %}"> {{ file.file }} </a>
+                                    {% else %}
+                                    Pregunta sin archivo
+                                    {% endif %}                                    
+                                </td>                                
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                      </table>
+                  </div>
+              </div>
+            {% endif %}
+            {% endfor %}
               <div>
                   <div class="card mb-4">
                       <div class="card-header">
