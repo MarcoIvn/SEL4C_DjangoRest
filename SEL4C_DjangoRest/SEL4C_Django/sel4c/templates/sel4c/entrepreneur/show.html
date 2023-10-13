@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container-fluid px-4">
-    
+
     <section class="section about-section gray-bg" id="about">
         <div class="container">
             <div class="row align-items-center flex-row-reverse">
@@ -27,140 +27,143 @@
                                 <div class="media">
                                     <label>Edad</label>
                                     <p>{{entrepreneur.age}} años</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="media">
+                                    <label>Grado académico</label>
+                                    <p>{{entrepreneur.degree}}</p>
+                                </div>
+                                <div class="media">
+                                    <label>Institución</label>
+                                    <p>{{entrepreneur.institution}}</p>
+                                </div>
+                                <div class="media">
+                                    <label>Campo de estudio</label>
+                                    <p>{{entrepreneur.studyField}}</p>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="media">
-                                <label>Grado académico</label>
-                                <p>{{entrepreneur.degree}}</p>
-                            </div>
-                            <div class="media">
-                                <label>Institución</label>
-                                <p>{{entrepreneur.institution}}</p>
-                            </div>
-                            <div class="media">
-                                <label>Campo de estudio</label>
-                                <p>{{entrepreneur.studyField}}</p>
-                            </div>
+                    </div>
+                </div>
+                {% if activities_completed %}
+                <div class="col-xl-6">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-chart-area me-1"></i>
+                            Gráfica de actividades
+                        </div>
+                        <div class="card-body"><canvas id="myBarChart" width="400%" data-labels="{{activity_labels}}"
+                                data-data="{{activities_completed_list}}"></canvas></div>
+                    </div>
+                </div>
+
+                {% endif %}
+            </div>
+
+            <div class="counter mb-4">
+                <div class="row mb-4">
+                    <div class="col-2 col-lg-7">
+                        <div class="count-data text-center">
+                            <h6 class="count h2" data-to="{{activities_completed.count}}"
+                                data-speed="{{activities_completed.count}}">{{activities_completed.count}}</h6>
+                            <p class="m-0px font-w-600">Actividades completadas</p>
+                        </div>
+                    </div>
+                    <div class="col-7 col-lg-2">
+                        <div class="count-data text-center">
+                            <h6 class="count h2" data-to="{{files_uploaded.count}}"
+                                data-speed="{{files_uploaded.count}}">{{files_uploaded.count}}</h6>
+                            <p class="m-0px font-w-600">Archivos subidos</p>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6">
-                <div class="about-avatar">
-                  <div class="col-xl-6">
-                      <div class="card mb-4">
-                          <div class="card-header">
-                              <i class="fas fa-chart-area me-1"></i>
-                              Gráfica de actividades
-                            </div>
-                            <div class="card-body"><canvas id="myBarChart" width="100%"  data-labels="{{activity_labels}}" data-data="{{activities_completed_list}}"></canvas></div>
-                        </div>
+
+            <div>
+                {% for activity, questions_with_answers, files in activity_answers_files %}
+                {% if questions_with_answers %}
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-table me-1"></i>
+                        Actividad {{ activity.activity.activity_num }}
+                    </div>
+                    <div class="card-body">
+                        <table class="datatablesSimple">
+                            <thead>
+                                <tr>
+                                    <th>Pregunta</th>
+                                    <th>Respuesta</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>Pregunta</th>
+                                    <th>Respuesta</th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+
+                                {% for question, answer in questions_with_answers %}
+                                <tr>
+                                    {{ activity_file.file }}
+                                    <td>{{ question.description }}</td>
+                                    <td>
+                                        {% if answer %}
+                                        {{ answer.answer }}
+                                        {% else %}
+                                        Pregunta no respondida
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-            </div>
-        </div>
-        
-        <div class="counter">
-            <div class="row">
-                <div class="col-2 col-lg-7">
-                    <div class="count-data text-center">
-                        <h6 class="count h2" data-to="{{activities_completed.count}}" data-speed="{{activities_completed.count}}">{{activities_completed.count}}</h6>
-                        <p class="m-0px font-w-600">Actividades completadas</p>
+                {% elif files %}
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-table me-1"></i>
+                        Actividad {{ activity.activity.activity_num }}
+                    </div>
+                    <div class="card-body">
+                        <table class="datatablesSimple">
+                            <thead>
+                                <tr>
+                                    <th>Archivo</th>
+
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>Archivo</th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                {% for file in files %}
+                                <tr>
+                                    <td>
+                                        {% if file %}
+                                        <a href="{% url 'download-file' file.id %}"> {{ file.file }} {{file.entrepreneur}}</a>
+                                        {% else %}
+                                        Pregunta sin archivo
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <div class="col-7 col-lg-2">
-                    <div class="count-data text-center">
-                        <h6 class="count h2" data-to="{{files_uploaded.count}}" data-speed="{{files_uploaded.count}}">{{files_uploaded.count}}</h6>
-                        <p class="m-0px font-w-600">Archivos subidos</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div>
-            {% for activity, questions_with_answers, files in activity_questions %}
-            {% if questions_with_answers %}
-            <div class="card mb-4">
-                <div class="card-header">
-                    <i class="fas fa-table me-1"></i>
-                    Actividad {{ activity.activity.activity_num }}
-                </div>
-                <div class="card-body">
-                    <table class="datatablesSimple">
-                        <thead>
-                            <tr>
-                                <th>Pregunta</th>
-                                <th>Respuesta</th>
-                            </tr>
-                        </thead>
-                        <tfoot>
-                            <tr>
-                                <th>Pregunta</th>
-                                <th>Respuesta</th>
-                            </tr>
-                        </tfoot>
-                        <tbody>
-                                                        
-                            {% for question, answer in questions_with_answers %}
-                            <tr>
-                                {{ activity_file.file }}
-                                <td>{{ question.description }}</td>
-                                <td>  
-                                    {% if answer %}
-                                    {{ answer.answer }}
-                                    {% else %}
-                                    Pregunta no respondida
-                                    {% endif %}                                    
-                                </td>                                
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                      </table>
-                  </div>
-              </div>
-            {% elif files%}
-            <div class="card mb-4">
-                <div class="card-header">
-                    <i class="fas fa-table me-1"></i>
-                    Actividad {{ activity.activity.activity_num }}
-                </div>
-                <div class="card-body">
-                    <table class="datatablesSimple">
-                        <thead>
-                            <tr>
-                                <th>Archivo</th>
-                                
-                            </tr>
-                        </thead>
-                        <tfoot>
-                            <tr>
-                                <th>Archivo</th>
-                            </tr>
-                        </tfoot>
-                        <tbody>                             
-                            {% for file in files %}
-                            <tr>
-                                <td>  
-                                    {% if file %}
-                                    <a href="{% url 'download-file' file.id %}"> {{ file.file }} </a>
-                                    {% else %}
-                                    Pregunta sin archivo
-                                    {% endif %}                                    
-                                </td>                                
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                      </table>
-                  </div>
-              </div>
-            {% endif %}
-            {% endfor %}
-              <div>
-                  <div class="card mb-4">
-                      <div class="card-header">
-                          <i class="fas fa-table me-1"></i>
-                          Archivos Subidos
+                {% endif %}
+                {% endfor %}
+                {% if files_uploaded %}
+                <div>
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-table me-1"></i>
+                            Archivos Subidos
                         </div>
                         <div class="card-body">
                             <table class="datatablesSimple">
@@ -199,9 +202,10 @@
                         </div>
                     </div>
                 </div>
-            </div>      
+                {% endif %}
+            </div>
         </div>
     </section>
 </div>
-        
-    {% endblock %}
+
+{% endblock %}
