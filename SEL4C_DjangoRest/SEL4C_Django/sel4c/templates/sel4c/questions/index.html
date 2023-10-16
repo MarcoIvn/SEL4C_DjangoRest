@@ -1,0 +1,55 @@
+{% extends "sel4c/base.html" %}
+{% block content %}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Preguntas</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">Preguntas de las encuestas de SEL4C</li>
+    </ol>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Preguntas
+        </div>
+        <div class="card-body">
+            <table class="datatablesSimple">
+                <thead>
+                    <tr>
+                        <th>Actividad</th>
+                        <th>Número</th>
+                        <th>Pregunta</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Actividad</th>
+                        <th>Número</th>
+                        <th>Pregunta</th>
+                        <th>Acciones</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    {% for question in questions %}
+                    <tr>
+                        <td>{{ question.activity }}</td>
+                        <td>{{ question.question_num }}</td>
+                        <td>{{ question.description }}</td>
+                        <td>
+                            <a href="{% url 'update_question' question.id %}" class="btn btn-primary btn-sm">Editar</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xl">
+            <a href="{% url 'home' %}" class="btn btn-info" role="button" aria-pressed="true">Volver</a>
+            <a href="{% url 'create_question' %}" class="btn btn-success" role="button" aria-pressed="true">Nueva pregunta</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

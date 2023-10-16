@@ -60,7 +60,6 @@ class HomeView(View):
             'gender_labels': json.dumps(gender_labels),
             'acts_comp_num':acts_comp_num,
         }   
-        print(context)
         return render(request, "sel4c/index.html", context)
     
 
@@ -77,7 +76,6 @@ class AdministratorView(View):
     def get(self, request, id):
         administrator = models.Administrator.objects.filter(id=id)
         context = { 'administrator': administrator}
-        print(context)
         return render(request, "sel4c/user/show.html", context)
 
 
@@ -104,6 +102,9 @@ class EntrepreneurView(View):
             for file in activity_completed.activity.file_set.filter(entrepreneur=entrepreneur):
                 files.append(file)
             activity_answers_files.append((activity_completed, questions_with_answers, files))
+
+        answers = models.Answer.objects.filter(entrepreneur=entrepreneur)
+
 
         context = {
             'entrepreneur': entrepreneur,
@@ -315,6 +316,25 @@ class CreateMultipleAnswersView(generics.CreateAPIView):
         return Response(created_answers, status=status.HTTP_201_CREATED, headers=headers)
 
 
+class CreateMultipleQuestionsView(generics.CreateAPIView):
+    serializer_class = serializers.QuestionSerializer
+    queryset = models.Question.objects.all()  # Agrega esta línea
+
+    def create(self, request, *args, **kwargs):
+        print(request)
+        question_data = request.data.get('questions', [])
+        created_questions = []
+
+        for question_item in question_data:
+            serializer = self.get_serializer(data=question_item)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+            created_questions.append(serializer.data)
+
+        headers = self.get_success_headers(created_questions)
+        return Response(created_questions, status=status.HTTP_201_CREATED, headers=headers)
+
+
 class registerAdministrator(View):
     @method_decorator(superuser_required)
     def get(self,request):
@@ -427,7 +447,6 @@ def fileList(request):
     files = models.File.objects.all()
     ctx = {
         'files':files}
-    print(ctx)
     return render(request, 'sel4c/files/index.html', ctx)
 
 
@@ -435,7 +454,6 @@ def listOfEntrepreneurs(request):
     entrepreneurs = models.Entrepreneur.objects.all()
     ctx = {
         'entrepreneurs':entrepreneurs}
-    print(ctx)
     return render(request, 'sel4c/entrepreneur/index.html', ctx)
 
 
@@ -445,7 +463,7 @@ def activityList(request): #####################################################
     return render(request, 'sel4c/activities/index.html', ctx)
 
 
-class ActivityCreateView(CreateView):
+class ActivityCreateView(CreateView):   
     model = models.Activity
     template_name = 'sel4c/activities/create-edit.html'
     fields = '__all__'
@@ -456,4 +474,24 @@ class ActivityUpdateView(UpdateView):
     model = models.Activity
     template_name = 'sel4c/activities/create-edit.html'
     fields = '__all__'
-    success_url = '/activities'
+    success_url = '/questions'
+
+
+def questionList(request): #########################################################
+    questions = models.Question.objects.all()
+    ctx = {'questions': questions}
+    return render(request, 'sel4c/questions/index.html', ctx)
+
+
+class QuestionCreateView(CreateView):   
+    model = models.Question
+    template_name = 'sel4c/questions/create-edit.html'
+    fields = ['activity', 'question_num', 'description']
+    success_url = '/questions'
+
+
+class QuestionUpdateView(UpdateView):
+    model = models.Question
+    template_name = 'sel4c/questions/create-edit.html'
+    fields = '__all__'
+    success_url = '/questions'
