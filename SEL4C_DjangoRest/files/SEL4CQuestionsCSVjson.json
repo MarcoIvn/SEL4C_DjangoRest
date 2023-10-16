@@ -1,0 +1,494 @@
+{
+  "questions": [
+      {
+          "question_num": 1,
+          "activity": 1,
+          "description": "Cuando algo me apasiona hago lo posible para lograr mis metas."
+      },
+      {
+          "question_num": 2,
+          "activity": 1,
+          "description": "Cuando mi trabajo me apasiona hago lo posible por concluirlo, aunque enfrente circunstancias adversas, falta de tiempo o distractores."
+      },
+      {
+          "question_num": 3,
+          "activity": 1,
+          "description": "A pesar del rechazo o problemas, siempre busco conseguir mis objetivos."
+      },
+      {
+          "question_num": 4,
+          "activity": 1,
+          "description": "Soy tolerante ante situaciones ambiguas o que me generen incertidumbre."
+      },
+      {
+          "question_num": 5,
+          "activity": 1,
+          "description": "Tengo la capacidad de establecer una meta clara y los pasos para lograrla."
+      },
+      {
+          "question_num": 6,
+          "activity": 1,
+          "description": "Es común que logre convencer a otros sobre mis ideas y acciones."
+      },
+      {
+          "question_num": 7,
+          "activity": 1,
+          "description": "Domino diferentes formas de comunicar mis ideas: por escrito"
+      },
+      {
+          "question_num": 8,
+          "activity": 1,
+          "description": "Se me facilita delegar actividades a los miembros de mi equipo de acuerdo con sus perfiles."
+      },
+      {
+          "question_num": 9,
+          "activity": 1,
+          "description": "Tengo la habilidad de identificar las fortalezas y debilidades de las personas con las que trabajo."
+      },
+      {
+          "question_num": 10,
+          "activity": 1,
+          "description": "Se me facilita colaborar de manera activa en un equipo para lograr objetivos comunes."
+      },
+      {
+          "question_num": 11,
+          "activity": 1,
+          "description": "Me apasiona trabajar en favor de causas sociales."
+      },
+      {
+          "question_num": 12,
+          "activity": 1,
+          "description": "Creo que la misión de mi vida es trabajar para el cambio social y mejorar la vida de las personas."
+      },
+      {
+          "question_num": 13,
+          "activity": 1,
+          "description": "Me interesa dirigir una iniciativa con resultados favorables para la sociedad y/o el medio ambiente."
+      },
+      {
+          "question_num": 14,
+          "activity": 1,
+          "description": "Soy capaz de identificar problemas en el entorno social o ambiental para generar soluciones innovadoras."
+      },
+      {
+          "question_num": 15,
+          "activity": 1,
+          "description": "Manifiesto un compromiso por participar en aspectos sociales de mi entorno."
+      },
+      {
+          "question_num": 16,
+          "activity": 1,
+          "description": "Opino que el crecimiento económico debe ocurrir en igualdad de oportunidades y equidad para todos."
+      },
+      {
+          "question_num": 17,
+          "activity": 1,
+          "description": "Mis acciones y comportamientos se rigen por normas morales basadas en el respeto y cuidado hacia las personas y a la naturaleza."
+      },
+      {
+          "question_num": 18,
+          "activity": 1,
+          "description": "Sé cómo aplicar estrategias para crear nuevas ideas o proyectos."
+      },
+      {
+          "question_num": 19,
+          "activity": 1,
+          "description": "Sé aplicar conocimientos contables y financieros para el desarrollo de un emprendimiento."
+      },
+      {
+          "question_num": 20,
+          "activity": 1,
+          "description": "Tengo nociones sobre la logística para llevar a cabo la gestión de una organización."
+      },
+      {
+          "question_num": 21,
+          "activity": 1,
+          "description": "Sé cómo realizar un presupuesto para lograr un proyecto."
+      },
+      {
+          "question_num": 22,
+          "activity": 1,
+          "description": "Sé cómo establecer criterios de valoración y medir los resultados de impacto social."
+      },
+      {
+          "question_num": 23,
+          "activity": 1,
+          "description": "Creo que el cometer errores nos ofrece nuevas oportunidades de aprendizaje."
+      },
+      {
+          "question_num": 24,
+          "activity": 1,
+          "description": "Conozco estrategias para desarrollar un proyecto"
+      },
+      {
+          "question_num": 25,
+          "activity": 1,
+          "description": "Tengo la capacidad de encontrar asociaciones entre las variables"
+      },
+      {
+          "question_num": 26,
+          "activity": 1,
+          "description": "Identifico datos de mi disciplina y de otras áreas que contribuyen a resolver problemas."
+      },
+      {
+          "question_num": 27,
+          "activity": 1,
+          "description": "Participo en proyectos que se tienen que resolver utilizando perspectivas Inter/multidisciplinarias."
+      },
+      {
+          "question_num": 28,
+          "activity": 1,
+          "description": "Organizo información para resolver problemas."
+      },
+      {
+          "question_num": 29,
+          "activity": 1,
+          "description": "Me agrada conocer perspectivas diferentes de un problema."
+      },
+      {
+          "question_num": 30,
+          "activity": 1,
+          "description": "Me inclino por estrategias para comprender las partes y el todo de un problema."
+      },
+      {
+          "question_num": 31,
+          "activity": 1,
+          "description": "Tengo la capacidad de Identificar los componentes esenciales de un problema para formular una pregunta de investigación."
+      },
+      {
+          "question_num": 32,
+          "activity": 1,
+          "description": "Conozco la estructura y los formatos para elaborar reportes de investigación que se utilizan en mi área o disciplina."
+      },
+      {
+          "question_num": 33,
+          "activity": 1,
+          "description": "Identifico la estructura de un artículo de investigación que se maneja en mi área o disciplina."
+      },
+      {
+          "question_num": 34,
+          "activity": 1,
+          "description": "Identifico los elementos para formular una pregunta de investigación."
+      },
+      {
+          "question_num": 35,
+          "activity": 1,
+          "description": "Diseño instrumentos de investigación coherentes con el método de investigación utilizado."
+      },
+      {
+          "question_num": 36,
+          "activity": 1,
+          "description": "Formulo y pruebo hipótesis de investigación."
+      },
+      {
+          "question_num": 37,
+          "activity": 1,
+          "description": "Me inclino a usar datos científicos para analizar problemas de investigación."
+      },
+      {
+          "question_num": 38,
+          "activity": 1,
+          "description": "Tengo la capacidad para analizar críticamente problemas desde diferentes perspectivas."
+      },
+      {
+          "question_num": 39,
+          "activity": 1,
+          "description": "Identifico la fundamentación de juicios propios y ajenos para reconocer argumentos falsos"
+      },
+      {
+          "question_num": 40,
+          "activity": 1,
+          "description": "Autoevalúo  el nivel de avance y logro de mis metas para hacer los ajustes necesarios."
+      },
+      {
+          "question_num": 41,
+          "activity": 1,
+          "description": "Utilizo razonamientos basados en el conocimiento científico para emitir juicios ante un problema."
+      },
+      {
+          "question_num": 42,
+          "activity": 1,
+          "description": "Me aseguro de revisar los lineamientos éticos de los proyectos en los que participo."
+      },
+      {
+          "question_num": 43,
+          "activity": 1,
+          "description": "Aprecio críticas en el desarrollo de proyectos para mejorarlos."
+      },
+      {
+          "question_num": 44,
+          "activity": 1,
+          "description": "Conozco los criterios para determinar un problema."
+      },
+      {
+          "question_num": 45,
+          "activity": 1,
+          "description": "Tengo la capacidad de identificar las variables  que pueden ayudar a responder preguntas."
+      },
+      {
+          "question_num": 46,
+          "activity": 1,
+          "description": "Aplico soluciones innovadoras a diversas problemáticas."
+      },
+      {
+          "question_num": 47,
+          "activity": 1,
+          "description": "Soluciono problemas interpretando datos de diferentes disciplinas."
+      },
+      {
+          "question_num": 48,
+          "activity": 1,
+          "description": "Analizo problemas de investigación contemplando el contexto para crear soluciones."
+      },
+      {
+          "question_num": 49,
+          "activity": 1,
+          "description": "Tiendo a evaluar con sentido crítico e innovador las soluciones derivadas de un problema."
+      },
+      {
+          "question_num": 1,
+          "activity": 7,
+          "description": "Cuando algo me apasiona hago lo posible para lograr mis metas."
+      },
+      {
+          "question_num": 2,
+          "activity": 7,
+          "description": "Cuando mi trabajo me apasiona hago lo posible por concluirlo, aunque enfrente circunstancias adversas, falta de tiempo o distractores."
+      },
+      {
+          "question_num": 3,
+          "activity": 7,
+          "description": "A pesar del rechazo o problemas, siempre busco conseguir mis objetivos."
+      },
+      {
+          "question_num": 4,
+          "activity": 7,
+          "description": "Soy tolerante ante situaciones ambiguas o que me generen incertidumbre."
+      },
+      {
+          "question_num": 5,
+          "activity": 7,
+          "description": "Tengo la capacidad de establecer una meta clara y los pasos para lograrla."
+      },
+      {
+          "question_num": 6,
+          "activity": 7,
+          "description": "Es común que logre convencer a otros sobre mis ideas y acciones."
+      },
+      {
+          "question_num": 7,
+          "activity": 7,
+          "description": "Domino diferentes formas de comunicar mis ideas: por escrito"
+      },
+      {
+          "question_num": 8,
+          "activity": 7,
+          "description": "Se me facilita delegar actividades a los miembros de mi equipo de acuerdo con sus perfiles."
+      },
+      {
+          "question_num": 9,
+          "activity": 7,
+          "description": "Tengo la habilidad de identificar las fortalezas y debilidades de las personas con las que trabajo."
+      },
+      {
+          "question_num": 10,
+          "activity": 7,
+          "description": "Se me facilita colaborar de manera activa en un equipo para lograr objetivos comunes."
+      },
+      {
+          "question_num": 11,
+          "activity": 7,
+          "description": "Me apasiona trabajar en favor de causas sociales."
+      },
+      {
+          "question_num": 12,
+          "activity": 7,
+          "description": "Creo que la misión de mi vida es trabajar para el cambio social y mejorar la vida de las personas."
+      },
+      {
+          "question_num": 13,
+          "activity": 7,
+          "description": "Me interesa dirigir una iniciativa con resultados favorables para la sociedad y/o el medio ambiente."
+      },
+      {
+          "question_num": 14,
+          "activity": 7,
+          "description": "Soy capaz de identificar problemas en el entorno social o ambiental para generar soluciones innovadoras."
+      },
+      {
+          "question_num": 15,
+          "activity": 7,
+          "description": "Manifiesto un compromiso por participar en aspectos sociales de mi entorno."
+      },
+      {
+          "question_num": 16,
+          "activity": 7,
+          "description": "Opino que el crecimiento económico debe ocurrir en igualdad de oportunidades y equidad para todos."
+      },
+      {
+          "question_num": 17,
+          "activity": 7,
+          "description": "Mis acciones y comportamientos se rigen por normas morales basadas en el respeto y cuidado hacia las personas y a la naturaleza."
+      },
+      {
+          "question_num": 18,
+          "activity": 7,
+          "description": "Sé cómo aplicar estrategias para crear nuevas ideas o proyectos."
+      },
+      {
+          "question_num": 19,
+          "activity": 7,
+          "description": "Sé aplicar conocimientos contables y financieros para el desarrollo de un emprendimiento."
+      },
+      {
+          "question_num": 20,
+          "activity": 7,
+          "description": "Tengo nociones sobre la logística para llevar a cabo la gestión de una organización."
+      },
+      {
+          "question_num": 21,
+          "activity": 7,
+          "description": "Sé cómo realizar un presupuesto para lograr un proyecto."
+      },
+      {
+          "question_num": 22,
+          "activity": 7,
+          "description": "Sé cómo establecer criterios de valoración y medir los resultados de impacto social."
+      },
+      {
+          "question_num": 23,
+          "activity": 7,
+          "description": "Creo que el cometer errores nos ofrece nuevas oportunidades de aprendizaje."
+      },
+      {
+          "question_num": 24,
+          "activity": 7,
+          "description": "Conozco estrategias para desarrollar un proyecto"
+      },
+      {
+          "question_num": 25,
+          "activity": 7,
+          "description": "Tengo la capacidad de encontrar asociaciones entre las variables"
+      },
+      {
+          "question_num": 26,
+          "activity": 7,
+          "description": "Identifico datos de mi disciplina y de otras áreas que contribuyen a resolver problemas."
+      },
+      {
+          "question_num": 27,
+          "activity": 7,
+          "description": "Participo en proyectos que se tienen que resolver utilizando perspectivas Inter/multidisciplinarias."
+      },
+      {
+          "question_num": 28,
+          "activity": 7,
+          "description": "Organizo información para resolver problemas."
+      },
+      {
+          "question_num": 29,
+          "activity": 7,
+          "description": "Me agrada conocer perspectivas diferentes de un problema."
+      },
+      {
+          "question_num": 30,
+          "activity": 7,
+          "description": "Me inclino por estrategias para comprender las partes y el todo de un problema."
+      },
+      {
+          "question_num": 31,
+          "activity": 7,
+          "description": "Tengo la capacidad de Identificar los componentes esenciales de un problema para formular una pregunta de investigación."
+      },
+      {
+          "question_num": 32,
+          "activity": 7,
+          "description": "Conozco la estructura y los formatos para elaborar reportes de investigación que se utilizan en mi área o disciplina."
+      },
+      {
+          "question_num": 33,
+          "activity": 7,
+          "description": "Identifico la estructura de un artículo de investigación que se maneja en mi área o disciplina."
+      },
+      {
+          "question_num": 34,
+          "activity": 7,
+          "description": "Identifico los elementos para formular una pregunta de investigación."
+      },
+      {
+          "question_num": 35,
+          "activity": 7,
+          "description": "Diseño instrumentos de investigación coherentes con el método de investigación utilizado."
+      },
+      {
+          "question_num": 36,
+          "activity": 7,
+          "description": "Formulo y pruebo hipótesis de investigación."
+      },
+      {
+          "question_num": 37,
+          "activity": 7,
+          "description": "Me inclino a usar datos científicos para analizar problemas de investigación."
+      },
+      {
+          "question_num": 38,
+          "activity": 7,
+          "description": "Tengo la capacidad para analizar críticamente problemas desde diferentes perspectivas."
+      },
+      {
+          "question_num": 39,
+          "activity": 7,
+          "description": "Identifico la fundamentación de juicios propios y ajenos para reconocer argumentos falsos"
+      },
+      {
+          "question_num": 40,
+          "activity": 7,
+          "description": "Autoevalúo  el nivel de avance y logro de mis metas para hacer los ajustes necesarios."
+      },
+      {
+          "question_num": 41,
+          "activity": 7,
+          "description": "Utilizo razonamientos basados en el conocimiento científico para emitir juicios ante un problema."
+      },
+      {
+          "question_num": 42,
+          "activity": 7,
+          "description": "Me aseguro de revisar los lineamientos éticos de los proyectos en los que participo."
+      },
+      {
+          "question_num": 43,
+          "activity": 7,
+          "description": "Aprecio críticas en el desarrollo de proyectos para mejorarlos."
+      },
+      {
+          "question_num": 44,
+          "activity": 7,
+          "description": "Conozco los criterios para determinar un problema."
+      },
+      {
+          "question_num": 45,
+          "activity": 7,
+          "description": "Tengo la capacidad de identificar las variables  que pueden ayudar a responder preguntas."
+      },
+      {
+          "question_num": 46,
+          "activity": 7,
+          "description": "Aplico soluciones innovadoras a diversas problemáticas."
+      },
+      {
+          "question_num": 47,
+          "activity": 7,
+          "description": "Soluciono problemas interpretando datos de diferentes disciplinas."
+      },
+      {
+          "question_num": 48,
+          "activity": 7,
+          "description": "Analizo problemas de investigación contemplando el contexto para crear soluciones."
+      },
+      {
+          "question_num": 49,
+          "activity": 7,
+          "description": "Tiendo a evaluar con sentido crítico e innovador las soluciones derivadas de un problema."
+      }
+  ]
+}

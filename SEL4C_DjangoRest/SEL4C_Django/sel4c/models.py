@@ -58,7 +58,7 @@ class Activity(models.Model):
 class Question(models.Model):
     question_num = models.IntegerField(default=0)
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
-    description = models.TextField()
+    description = models.TextField(max_length=250)
     
     def __str__(self) -> str:
         return f"{self.id}. ({self.description})"

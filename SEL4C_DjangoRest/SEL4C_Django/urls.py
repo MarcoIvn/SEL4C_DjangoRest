@@ -34,6 +34,7 @@ urlpatterns = [
   # Redoc UI:
   path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
   path('api/answers/create-multiple/', views.CreateMultipleAnswersView.as_view(), name='create-multiple-answers'),
+  path('api/questions/create-multiple/', views.CreateMultipleQuestionsView.as_view(), name='create-multiple-questions'),
 
 
   path('',views.LoginView.as_view(), name= "login"),
@@ -75,4 +76,8 @@ urlpatterns = [
   path('activities/',login_required(views.activityList, login_url='login'), name='activities'),
   path('activities/<int:pk>', login_required(views.ActivityUpdateView.as_view(), login_url='login'), name='update_activity'),
   path('activities/create', login_required(views.ActivityCreateView.as_view(), login_url='login'), name='create_activity'),
+  
+  path('questions/',login_required(views.questionList, login_url='login'), name='questions'),
+  path('questions/<int:pk>', login_required(views.QuestionUpdateView.as_view(), login_url='login'), name='update_question'),
+  path('questions/create', login_required(views.QuestionCreateView.as_view(), login_url='login'), name='create_question'),
 ]
