@@ -48,16 +48,15 @@ class Activity(models.Model):
     activity_num = models.IntegerField(choices=ACTIVITY_CHOICES, unique=True)
     title = models.CharField(max_length=255)
     description = models.TextField()
-    deliveries = models.IntegerField(default=0)
 
     def __str__(self) -> str:
         return f"{self.activity_num}"
     class Meta:
         app_label = 'sel4c'
 
+
 class Question(models.Model):
     question_num = models.IntegerField(default=0)
-    activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
     description = models.TextField(max_length=250)
     
     def __str__(self) -> str:

@@ -93,19 +93,31 @@ class EntrepreneurView(View):
         activities_completed_list = list(activity_data.values())
         
         activity_answers_files = []
+        answers_act1 = []
+        answers_act7 = []
+        answers_int_labels = []
+        answers_str_labels = []
         for activity_completed in activities_completed:
             questions_with_answers = []
             files = []
-            for question in activity_completed.activity.question_set.all():
-                answer = question.answer_set.filter(entrepreneur=entrepreneur).first()
-                questions_with_answers.append((question, answer))
+            for question in models.Question.objects.all():
+                answer = question.answer_set.filter(entrepreneur=entrepreneur,activity=activity_completed.activity).first()
+                if answer != None:
+                    questions_with_answers.append((question, answer))
+                    if activity_completed.activity.activity_num == 1:
+                        answers_act1.append(answer.answer)
+                    elif activity_completed.activity.activity_num == 7:
+                        answers_act7.append(answer.answer)
+                if question.question_num not in answers_int_labels:
+                    answers_int_labels.append(question.question_num)
+                    answers_str_labels.append(question.description)
             for file in activity_completed.activity.file_set.filter(entrepreneur=entrepreneur):
                 files.append(file)
-            activity_answers_files.append((activity_completed, questions_with_answers, files))
-
-        answers = models.Answer.objects.filter(entrepreneur=entrepreneur)
-
-
+            activity_answers_files.append((activity_completed, questions_with_answers, files)) 
+        
+        all_answers = {'answers_act1':answers_act1, 'answers_act7':answers_act7}
+        answers_labels = {'answers_int_labels':answers_int_labels, 'answers_str_labels':answers_str_labels}
+    
         context = {
             'entrepreneur': entrepreneur,
             'activities_completed': activities_completed,
@@ -114,13 +126,15 @@ class EntrepreneurView(View):
             'activity_labels': json.dumps(activity_labels),
             'activities_completed_list': json.dumps(activities_completed_list),
             'activities_completed': activities_completed,
-            
+            'all_answers': json.dumps(all_answers),
+            'answers_labels': json.dumps(answers_labels),
         }
+        print(json.dumps(all_answers),)
         if request.user.is_authenticated:
             return render(request, "sel4c/entrepreneur/show.html", context)
         else:
             return render(request, "sel4c/index.html")
-
+        
 
 class LoginView(View):
     def get(self, request):

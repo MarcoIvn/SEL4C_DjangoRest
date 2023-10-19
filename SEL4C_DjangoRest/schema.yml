@@ -343,6 +343,176 @@ paths:
       responses:
         '204':
           description: No response body
+  /api-root/completed-acts/:
+    get:
+      operationId: api_root_completed_acts_list
+      description: API endpoint that allows Respuestas to be viewed or edited.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - api-root
+      security:
+      - basicAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedActivitiesCompletedList'
+          description: ''
+    post:
+      operationId: api_root_completed_acts_create
+      description: API endpoint that allows Respuestas to be viewed or edited.
+      tags:
+      - api-root
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActivitiesCompleted'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ActivitiesCompleted'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ActivitiesCompleted'
+        required: true
+      security:
+      - basicAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivitiesCompleted'
+          description: ''
+  /api-root/completed-acts/{id}/:
+    get:
+      operationId: api_root_completed_acts_retrieve
+      description: API endpoint that allows Respuestas to be viewed or edited.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Activities Completed.
+        required: true
+      tags:
+      - api-root
+      security:
+      - basicAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivitiesCompleted'
+          description: ''
+    put:
+      operationId: api_root_completed_acts_update
+      description: API endpoint that allows Respuestas to be viewed or edited.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Activities Completed.
+        required: true
+      tags:
+      - api-root
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActivitiesCompleted'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ActivitiesCompleted'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ActivitiesCompleted'
+        required: true
+      security:
+      - basicAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivitiesCompleted'
+          description: ''
+    patch:
+      operationId: api_root_completed_acts_partial_update
+      description: API endpoint that allows Respuestas to be viewed or edited.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Activities Completed.
+        required: true
+      tags:
+      - api-root
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedActivitiesCompleted'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedActivitiesCompleted'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedActivitiesCompleted'
+      security:
+      - basicAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivitiesCompleted'
+          description: ''
+    delete:
+      operationId: api_root_completed_acts_destroy
+      description: API endpoint that allows Respuestas to be viewed or edited.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Activities Completed.
+        required: true
+      tags:
+      - api-root
+      security:
+      - basicAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
   /api-root/entrepreneurs/:
     get:
       operationId: api_root_entrepreneurs_list
@@ -859,6 +1029,66 @@ paths:
       responses:
         '204':
           description: No response body
+  /api/answers/create-multiple/:
+    post:
+      operationId: api_answers_create_multiple_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Answer'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Answer'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Answer'
+        required: true
+      security:
+      - basicAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Answer'
+          description: ''
+  /api/questions/create-multiple/:
+    post:
+      operationId: api_questions_create_multiple_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Question'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Question'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Question'
+        required: true
+      security:
+      - basicAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+          description: ''
   /api/schema/:
     get:
       operationId: api_schema_retrieve
@@ -1089,6 +1319,22 @@ paths:
           description: ''
 components:
   schemas:
+    ActivitiesCompleted:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        activity:
+          type: integer
+        entrepreneur:
+          type: integer
+        attempts:
+          type: integer
+      required:
+      - activity
+      - entrepreneur
+      - id
     Activity:
       type: object
       properties:
@@ -1096,33 +1342,52 @@ components:
           type: integer
           readOnly: true
         activity_num:
-          type: integer
+          $ref: '#/components/schemas/ActivityNumEnum'
         title:
           type: string
           maxLength: 255
         description:
           type: string
-        deliveries:
-          type: integer
       required:
+      - activity_num
       - description
       - id
       - title
+    ActivityNumEnum:
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      type: integer
+      description: |-
+        * `1` - 1
+        * `2` - 2
+        * `3` - 3
+        * `4` - 4
+        * `5` - 5
+        * `6` - 6
+        * `7` - 7
     Answer:
       type: object
       properties:
         id:
           type: integer
           readOnly: true
+        activity:
+          type: integer
         question:
-          type: string
-          format: uri
+          type: integer
         answer:
           type: integer
         entrepreneur:
-          type: string
-          format: uri
+          type: integer
       required:
+      - activity
+      - entrepreneur
       - id
       - question
     Entrepreneur:
@@ -1151,8 +1416,7 @@ components:
           type: string
           maxLength: 255
         gender:
-          type: string
-          maxLength: 255
+          $ref: '#/components/schemas/GenderEnum'
         age:
           type: integer
         country:
@@ -1186,16 +1450,46 @@ components:
           type: string
           maxLength: 255
         activity:
-          type: string
-          format: uri
+          type: integer
         entrepreneur:
-          type: string
-          format: uri
+          type: integer
       required:
       - activity
       - file
       - filetype
       - id
+    GenderEnum:
+      enum:
+      - Masculino
+      - Femenino
+      - No binario
+      - Prefiero no decirlo
+      type: string
+      description: |-
+        * `Masculino` - Masculino
+        * `Femenino` - Femenino
+        * `No binario` - No binario
+        * `Prefiero no decirlo` - Prefiero no decirlo
+    PaginatedActivitiesCompletedList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ActivitiesCompleted'
     PaginatedActivityList:
       type: object
       properties:
@@ -1296,6 +1590,18 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Question'
+    PatchedActivitiesCompleted:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        activity:
+          type: integer
+        entrepreneur:
+          type: integer
+        attempts:
+          type: integer
     PatchedActivity:
       type: object
       properties:
@@ -1303,28 +1609,26 @@ components:
           type: integer
           readOnly: true
         activity_num:
-          type: integer
+          $ref: '#/components/schemas/ActivityNumEnum'
         title:
           type: string
           maxLength: 255
         description:
           type: string
-        deliveries:
-          type: integer
     PatchedAnswer:
       type: object
       properties:
         id:
           type: integer
           readOnly: true
+        activity:
+          type: integer
         question:
-          type: string
-          format: uri
+          type: integer
         answer:
           type: integer
         entrepreneur:
-          type: string
-          format: uri
+          type: integer
     PatchedEntrepreneur:
       type: object
       properties:
@@ -1351,8 +1655,7 @@ components:
           type: string
           maxLength: 255
         gender:
-          type: string
-          maxLength: 255
+          $ref: '#/components/schemas/GenderEnum'
         age:
           type: integer
         country:
@@ -1374,11 +1677,9 @@ components:
           type: string
           maxLength: 255
         activity:
-          type: string
-          format: uri
+          type: integer
         entrepreneur:
-          type: string
-          format: uri
+          type: integer
     PatchedQuestion:
       type: object
       properties:
@@ -1387,11 +1688,9 @@ components:
           readOnly: true
         question_num:
           type: integer
-        activity:
-          type: string
-          format: uri
         description:
           type: string
+          maxLength: 250
     Question:
       type: object
       properties:
@@ -1400,13 +1699,10 @@ components:
           readOnly: true
         question_num:
           type: integer
-        activity:
-          type: string
-          format: uri
         description:
           type: string
+          maxLength: 250
       required:
-      - activity
       - description
       - id
     TokenObtainPair:
