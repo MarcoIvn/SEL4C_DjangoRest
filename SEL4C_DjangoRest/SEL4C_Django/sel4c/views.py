@@ -74,25 +74,39 @@ class HomeView(View):
             return redirect('login')
 
 
-
 class EntrepreneurView(View):
     def get(self, request, id):
         # Use Subquery and OuterRef to perform a LEFT JOIN-like operation
-        entrepreneur = models.Entrepreneur_Data.objects.filter(id_id=id).only('degree', 'institution', 'gender', 'age', 'country', 'studyField')
-        print(entrepreneur)
-        user= models.User.objects.filter(id = id).annotate(
-            degree=Subquery(entrepreneur.values('degree')[:1]),
-            institution=Subquery(entrepreneur.values('institution')[:1]),
-            gender=Subquery(entrepreneur.values('gender')[:1]),
-            age=Subquery(entrepreneur.values('age')[:1]),
-            country=Subquery(entrepreneur.values('country')[:1]),
-            studyField=Subquery(entrepreneur.values('studyField')[:1])
-        )
-
+        entrepreneur = models.Entrepreneur.objects.get(id = id)
+        activities_completed = models.ActivitiesCompleted.objects.filter(entrepreneur=entrepreneur)
+        files_uploaded = models.File.objects.filter(entrepreneur=entrepreneur)
+        activity_counts = models.Activity.objects.filter(activitiescompleted__entrepreneur=entrepreneur).annotate(num_completed=Count('activitiescompleted')).values('activity_num', 'num_completed')
+        activity_data = {f"Actividad {activity['activity_num']}": activity['num_completed'] for activity in activity_counts}
+        
+        activity_labels = list(activity_data.keys())
+        activities_completed_list = list(activity_data.values())
+        
+        activity_answers_files = []
+        for activity_completed in activities_completed:
+            questions_with_answers = []
+            files = []
+            for question in activity_completed.activity.question_set.all():
+                answer = question.answer_set.filter(entrepreneur=entrepreneur).first()
+                questions_with_answers.append((question, answer))
+            for file in activity_completed.activity.file_set.filter(entrepreneur=entrepreneur):
+                files.append(file)
+            activity_answers_files.append((activity_completed, questions_with_answers, files)) 
+       
         context = {
-            'entrepreneur': user
+            'entrepreneur': entrepreneur,
+            'activities_completed': activities_completed,
+            'files_uploaded': files_uploaded,
+            'activity_answers_files': activity_answers_files,
+            'activity_labels': json.dumps(activity_labels),
+            'activities_completed_list': json.dumps(activities_completed_list),
+            'activities_completed': activities_completed,
+            
         }
-        print(context)
         if request.user.is_authenticated and entrepreneur.exists:
             return render(request, "sel4c/entrepreneur/show.html", context)
         else:
