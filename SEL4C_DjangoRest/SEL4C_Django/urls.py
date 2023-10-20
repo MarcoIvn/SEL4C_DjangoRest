@@ -83,4 +83,5 @@ urlpatterns = [
 
   path('csv/answers/',login_required(views.csv_all_entrepreneurs_answers, login_url='login'), name='csv_all_answers'),
   path('csv/answers/<int:id>',login_required(views.csv_one_entrepreneur_answers, login_url='login'), name='csv_one_answers'),
+  path('csv/answers/<int:id>/<int:activity>',login_required(views.csv_one_entrepreneur_act_answers, login_url='login'), name='csv_one_act_answers'),
 ]
