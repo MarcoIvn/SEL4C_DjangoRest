@@ -5,10 +5,11 @@ document.addEventListener("DOMContentLoaded", function() {
   var Chart2Data1 = document.getElementById("radarChart2").getAttribute("data-ecomplexity_results1");
   var Chart2Data2 = document.getElementById("radarChart2").getAttribute("data-ecomplexity_results2");
 
-  console.log(Chart1Data1.pop())
-  console.log(Chart1Data2.pop())
-  console.log(Chart2Data1.pop())
-  console.log(Chart2Data2.pop())
+  console.log(Chart1Data1)
+  console.log(Chart1Data2)
+  console.log(Chart2Data1)
+  console.log(Chart2Data2)
+
   
   var chartOptions = {
     scale: {
@@ -41,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function() {
   };
 
   var marksData2 = {
-    labels: ["1", "2", "3", "4"],
+    labels: ["Pensamiento sistématico", "Pensamiento científico", "Pensamiento crítico", "Pensamiento innovador"],
     datasets: [{
         label: "Cuestionario Inicial",
         backgroundColor: "rgba(200,0,0,0.2)",
@@ -65,5 +66,4 @@ document.addEventListener("DOMContentLoaded", function() {
       options: chartOptions  // Opciones personalizadas para la segunda gráfica si es necesario
   });
 
-  
 });
