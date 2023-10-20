@@ -33,7 +33,7 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
 
 
@@ -83,7 +83,7 @@
             </table>
         </div>
     </div>
-
+    {% if entrepreneurs %}
     <div class="row">
         <div class="col-xl-6">
             <div class="card mb-4">
@@ -91,8 +91,8 @@
                     <i class="fas fa-chart-area me-1"></i>
                     Demografía
                 </div>
-                <div class="card-body"><canvas id="myPieChart" width="100%" height="40"
-                        data-labels="{{gender_labels}}" data-data="{{gender_data}}"></canvas></div>
+                <div class="card-body"><canvas id="myPieChart" width="100%" height="40" data-labels="{{gender_labels}}"
+                        data-data="{{gender_data}}"></canvas></div>
             </div>
         </div>
         <div class="col-xl-6">
@@ -101,73 +101,79 @@
                     <i class="fas fa-chart-bar me-1"></i>
                     Gráfica de Actividades
                 </div>
-                <div class="card-body"><canvas id="myBarChart" width="100%" height="40" data-labels="{{activity_labels}}" 
-                        data-data="{{activities_completed}}"></canvas></div>
+                <div class="card-body"><canvas id="myBarChart" width="100%" height="40"
+                        data-labels="{{activity_labels}}" data-data="{{activities_completed}}"></canvas></div>
             </div>
         </div>
     </div>
+    {% endif %}
 
     <div class="card mb-4">
-      <div class="card-header">
-          <i class="fas fa-table me-1"></i>
-          Panel de acciones recientes
-      </div>
-      <div class="card-body">
-          <table class="datatablesSimple">
-              <thead>
-                  <tr>
-                      <th>Administrador</th>
-                      <th>Acción</th>
-                      <th>Fecha</th>
-                  </tr>
-              </thead>
-              <tfoot>
-                  <tr>
-                      <th>Administrador</th>
-                      <th>Acción</th>
-                      <th>Fecha</th>
-                  </tr>
-              </tfoot>
-              <tbody>
-                  {% for action in recent_actions %}
-                  <tr>
-                      <td>
-                          {% if action.content_type.model == "entrepreneur" %}
-                              {{ action.user }}
-                          {% else %}
-                              {{ action.user|default:"Desconocido" }}
-                          {% endif %}
-                      </td>
-                      <td>
-                          {% if action.content_type.model == "entrepreneur" %}
-                              {% if action.action_flag == 1 %}
-                                  Se registró un emprendedor con nombre "{{ action.object_repr }}"
-                              {% elif action.action_flag == 2 %}
-                                  El emprendedor con nombre "{{ action.object_repr }}" modificó su {{ action.change_message|safe }}
-                              {% else %}
-                                  {{ action.user }} realizó una acción personalizada en el emprendedor con nombre "{{ action.object_repr }}"
-                              {% endif %}
-                          {% else %}
-                              {% if action.action_flag == 1 %}
-                                  {{ action.user }} añadió {{ action.content_type.model }} "{{ action.object_repr }}" a {{ action.content_type.app_label }}
-                              {% elif action.action_flag == 2 %}
-                                  {{ action.user }} cambió {{ action.content_type.model }} "{{ action.object_repr }}" en {{ action.content_type.app_label }}
-                              {% elif action.action_flag == 3 %}
-                                  {{ action.user }} eliminó {{ action.content_type.model }} "{{ action.object_repr }}" de {{ action.content_type.app_label }}
-                              {% else %}
-                                  {{ action.user }} realizó una acción personalizada en {{ action.content_type.model }} "{{ action.object_repr }}" en {{ action.content_type.app_label }}
-                              {% endif %}
-                          {% endif %}
-                      </td>
-                      <td>
-                          {{ action.action_time|date:"F j, Y, P" }}
-                      </td>
-                  </tr>
-                  {% endfor %}
-              </tbody>
-          </table>
-      </div>
-  </div>
-  
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Panel de acciones recientes
+        </div>
+        <div class="card-body">
+            <table class="datatablesSimple">
+                <thead>
+                    <tr>
+                        <th>Administrador</th>
+                        <th>Acción</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Administrador</th>
+                        <th>Acción</th>
+                        <th>Fecha</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    {% for action in recent_actions %}
+                    <tr>
+                        <td>
+                            {% if action.content_type.model == "entrepreneur" %}
+                            {{ action.user }}
+                            {% else %}
+                            {{ action.user|default:"Desconocido" }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if action.content_type.model == "entrepreneur" %}
+                            {% if action.action_flag == 1 %}
+                            Se registró un emprendedor con nombre "{{ action.object_repr }}"
+                            {% elif action.action_flag == 2 %}
+                            El emprendedor con nombre "{{ action.object_repr }}" modificó su {{
+                            action.change_message|safe }}
+                            {% else %}
+                            {{ action.user }} realizó una acción personalizada en el emprendedor con nombre "{{
+                            action.object_repr }}"
+                            {% endif %}
+                            {% else %}
+                            {% if action.action_flag == 1 %}
+                            {{ action.user }} añadió {{ action.content_type.model }} "{{ action.object_repr }}" a {{
+                            action.content_type.app_label }}
+                            {% elif action.action_flag == 2 %}
+                            {{ action.user }} cambió {{ action.content_type.model }} "{{ action.object_repr }}" en {{
+                            action.content_type.app_label }}
+                            {% elif action.action_flag == 3 %}
+                            {{ action.user }} eliminó {{ action.content_type.model }} "{{ action.object_repr }}" de {{
+                            action.content_type.app_label }}
+                            {% else %}
+                            {{ action.user }} realizó una acción personalizada en {{ action.content_type.model }} "{{
+                            action.object_repr }}" en {{ action.content_type.app_label }}
+                            {% endif %}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ action.action_time|date:"F j, Y, P" }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 {% endblock %}

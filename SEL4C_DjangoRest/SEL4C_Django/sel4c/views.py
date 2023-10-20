@@ -488,7 +488,7 @@ class ActivityUpdateView(UpdateView):
     model = models.Activity
     template_name = 'sel4c/activities/create-edit.html'
     fields = '__all__'
-    success_url = '/questions'
+    success_url = '/activities'
 
 
 def questionList(request): #########################################################
