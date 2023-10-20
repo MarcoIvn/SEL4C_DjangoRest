@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function() {
   console.log(Chart1Data2)
   console.log(Chart2Data1)
   console.log(Chart2Data2)
+
   
   var chartOptions = {
     scale: {
@@ -30,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function() {
     "Sentido Ético", "Creatividad", "Alfabetización economica y financiera", "Valoración de ideas, resultados e impactos en el ambiente y las personas",
   "Aprendizaje y adaptibilidad","Gestión de recursos limitados para proyectos sociales"],
       datasets: [{
-          label: "Cuestionario inicial",
+          label: "Cuestionario Inicial",
           backgroundColor: "rgba(200,0,0,0.2)",
           data: Chart1Data1,
       }, {
@@ -64,4 +65,5 @@ document.addEventListener("DOMContentLoaded", function() {
       data: marksData2,  // Define tus datos para la segunda gráfica
       options: chartOptions  // Opciones personalizadas para la segunda gráfica si es necesario
   });
+
 });
