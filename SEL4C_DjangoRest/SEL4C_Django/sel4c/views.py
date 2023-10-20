@@ -88,7 +88,22 @@ class EntrepreneurView(View):
         files_uploaded = models.File.objects.filter(entrepreneur=entrepreneur)
         activity_counts = models.Activity.objects.filter(activitiescompleted__entrepreneur=entrepreneur).annotate(num_completed=Count('activitiescompleted')).values('activity_num', 'num_completed')
         activity_data = {f"Actividad {activity['activity_num']}": activity['num_completed'] for activity in activity_counts}
+
+        profile_results_activity1 = models.EntrepreneurProfile.objects.filter(entrepreneur=entrepreneur, activity_id=1).values_list('result1', 'result2', 'result3', 'result4', 'result5', 'result6', 'result7', 'result8', 'result9', 'result10', 'result11', 'result12', 'result13', 'result14', 'result15', 'result16', 'result17')
+        profile_results_activity7 = models.EntrepreneurProfile.objects.filter(entrepreneur=entrepreneur, activity_id=7).values_list('result1', 'result2','result3','result4', 'result5', 'result6', 'result7', 'result8', 'result9', 'result10', 'result11', 'result12', 'result13', 'result14', 'result15', 'result16', 'result17')
+        ecomplexity_results_activity1 = models.EntrepreneurEcomplexity.objects.filter(entrepreneur=entrepreneur, activity_id=1).values_list('result1', 'result2', 'result3', 'result4')
+        ecomplexity_results_activity7 = models.EntrepreneurEcomplexity.objects.filter(entrepreneur=entrepreneur, activity_id=7).values_list('result1', 'result2','result3','result4')
         
+        profile_results_activity1 = [[float(item) for item in row] for row in profile_results_activity1]
+        profile_results_activity7 = [[float(item) for item in row] for row in profile_results_activity7]
+        ecomplexity_results_activity1 = [[float(item) for item in row] for row in ecomplexity_results_activity1]
+        ecomplexity_results_activity7 = [[float(item) for item in row] for row in ecomplexity_results_activity7]
+        
+        print(profile_results_activity1)
+        print(profile_results_activity7)
+        print(ecomplexity_results_activity1)
+        print(ecomplexity_results_activity7)
+
         activity_labels = list(activity_data.keys())
         activities_completed_list = list(activity_data.values())
         
@@ -128,8 +143,11 @@ class EntrepreneurView(View):
             'activities_completed': activities_completed,
             'all_answers': json.dumps(all_answers),
             'answers_labels': json.dumps(answers_labels),
+            'profile_results_activity1': json.dumps(profile_results_activity1),
+            'profile_results_activity7': json.dumps(profile_results_activity7),
+            'ecomplexity_results_activity1' : json.dumps(ecomplexity_results_activity1),
+            'ecomplexity_results_activity7' : json.dumps(ecomplexity_results_activity7),
         }
-        print(json.dumps(all_answers),)
         if request.user.is_authenticated:
             return render(request, "sel4c/entrepreneur/show.html", context)
         else:
