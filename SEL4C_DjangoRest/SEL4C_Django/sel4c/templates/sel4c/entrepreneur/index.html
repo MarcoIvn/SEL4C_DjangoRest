@@ -25,6 +25,7 @@
             <th>Edad</th>
             <th>País</th>
             <th>Campo de estudio</th>
+            <th>Descarga</th>
           </tr>
         </thead>
         <tfoot>
@@ -36,6 +37,7 @@
             <th>Edad</th>
             <th>País</th>
             <th>Campo de estudio</th>
+            <th>Descarga</th>
           </tr>
         </tfoot>
         <tbody>
@@ -49,6 +51,12 @@
             <td>{{ entrepreneur.age }}</td>
             <td>{{ entrepreneur.country }}</td>
             <td>{{ entrepreneur.studyField }}</td>
+            <td>
+              <a href="{% url 'csv_one_answers' entrepreneur.id %}" class="btn btn-success" role="button"
+                aria-pressed="true" style="font-size:14px;">
+                <i class="fas fa-download"></i> CSV
+              </a>
+            </td>
           </tr>
           {% endfor %}
         </tbody>

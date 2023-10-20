@@ -80,4 +80,7 @@ urlpatterns = [
   path('questions/',login_required(views.questionList, login_url='login'), name='questions'),
   path('questions/<int:pk>', login_required(views.QuestionUpdateView.as_view(), login_url='login'), name='update_question'),
   path('questions/create', login_required(views.QuestionCreateView.as_view(), login_url='login'), name='create_question'),
+
+  path('csv/answers/',login_required(views.csv_all_entrepreneurs_answers, login_url='login'), name='csv_all_answers'),
+  path('csv/answers/<int:id>',login_required(views.csv_one_entrepreneur_answers, login_url='login'), name='csv_one_answers'),
 ]

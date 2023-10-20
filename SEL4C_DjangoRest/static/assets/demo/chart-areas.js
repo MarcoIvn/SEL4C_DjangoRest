@@ -23,7 +23,7 @@ var myLineChart = new Chart(ctx, {
       {
         label: "Diagnóstico",
         lineTension: 0.3,
-        backgroundColor: "rgba(213,184,255,0.5)",
+        backgroundColor: "rgba(213,184,255,0)",
         borderColor: "rgba(159,90,253,1)",
         pointRadius: 5,
         pointBackgroundColor: "rgba(90,34,139,1)",
@@ -37,13 +37,13 @@ var myLineChart = new Chart(ctx, {
       {
         label: "Cierre",
         lineTension: 0.3,
-        backgroundColor: "rgba(90,150,255,0.5)",
-        borderColor: "rgba(50,100,200,1)",
+        backgroundColor: "rgba(255,213,184,0)",
+        borderColor: "rgba(253,159,90,1)",
         pointRadius: 5,
-        pointBackgroundColor: "rgba(30,80,150,1)",
-        pointBorderColor: "rgba(40,120,180,1)",
+        pointBackgroundColor: "rgba(139,90,34,1)",
+        pointBorderColor: "rgba(236,191,85,1)",
         pointHoverRadius: 5,
-        pointHoverBackgroundColor: "rgba(60,110,220,1)",
+        pointHoverBackgroundColor: "rgba(252,140,20,1)",
         pointHitRadius: 50,
         pointBorderWidth: 2,
         data: dataset2,
@@ -58,7 +58,9 @@ var myLineChart = new Chart(ctx, {
             display: true,
           },
           ticks: {
-            maxTicksLimit: 6,
+            maxTicksLimit: 100,
+            maxRotation: 90, 
+            minRotation: 90,
             display: true,
           },
         },
@@ -67,7 +69,7 @@ var myLineChart = new Chart(ctx, {
         {
           ticks: {
             min: 0,
-            maxTicksLimit: 6,
+            maxTicksLimit: 7,
           },
           gridLines: {
             color: "rgba(0, 0, 0, .125)",
