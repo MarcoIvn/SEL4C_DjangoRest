@@ -59,18 +59,16 @@ class ActivitySerializer(serializers.HyperlinkedModelSerializer):
                 'id',
                 'activity_num', 
                 'title', 
-                'description', 
-                'deliveries']
+                'description']
         
     
 class QuestionSerializer(serializers.HyperlinkedModelSerializer):
-    activity = serializers.PrimaryKeyRelatedField(queryset=models.Activity.objects.all())
+
     class Meta:
         model = models.Question
         fields = [
                 'id',
                 'question_num', 
-                'activity', 
                 'description']
 
 

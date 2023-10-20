@@ -93,19 +93,31 @@ class EntrepreneurView(View):
         activities_completed_list = list(activity_data.values())
         
         activity_answers_files = []
+        answers_act1 = []
+        answers_act7 = []
+        answers_int_labels = []
+        answers_str_labels = []
         for activity_completed in activities_completed:
             questions_with_answers = []
             files = []
-            for question in activity_completed.activity.question_set.all():
-                answer = question.answer_set.filter(entrepreneur=entrepreneur).first()
-                questions_with_answers.append((question, answer))
+            for question in models.Question.objects.all():
+                answer = question.answer_set.filter(entrepreneur=entrepreneur,activity=activity_completed.activity).first()
+                if answer != None:
+                    questions_with_answers.append((question, answer))
+                    if activity_completed.activity.activity_num == 1:
+                        answers_act1.append(answer.answer)
+                    elif activity_completed.activity.activity_num == 7:
+                        answers_act7.append(answer.answer)
+                if question.question_num not in answers_int_labels:
+                    answers_int_labels.append(question.question_num)
+                    answers_str_labels.append(f"{question.question_num}: {question.description}")
             for file in activity_completed.activity.file_set.filter(entrepreneur=entrepreneur):
                 files.append(file)
-            activity_answers_files.append((activity_completed, questions_with_answers, files))
-
-        answers = models.Answer.objects.filter(entrepreneur=entrepreneur)
-
-
+            activity_answers_files.append((activity_completed, questions_with_answers, files)) 
+        
+        all_answers = {'answers_act1':answers_act1, 'answers_act7':answers_act7}
+        answers_labels = {'answers_int_labels':answers_int_labels, 'answers_str_labels':answers_str_labels}
+    
         context = {
             'entrepreneur': entrepreneur,
             'activities_completed': activities_completed,
@@ -114,13 +126,15 @@ class EntrepreneurView(View):
             'activity_labels': json.dumps(activity_labels),
             'activities_completed_list': json.dumps(activities_completed_list),
             'activities_completed': activities_completed,
-            
+            'all_answers': json.dumps(all_answers),
+            'answers_labels': json.dumps(answers_labels),
         }
+        print(json.dumps(all_answers),)
         if request.user.is_authenticated:
             return render(request, "sel4c/entrepreneur/show.html", context)
         else:
             return render(request, "sel4c/index.html")
-
+        
 
 class LoginView(View):
     def get(self, request):
@@ -474,7 +488,7 @@ class ActivityUpdateView(UpdateView):
     model = models.Activity
     template_name = 'sel4c/activities/create-edit.html'
     fields = '__all__'
-    success_url = '/questions'
+    success_url = '/activities'
 
 
 def questionList(request): #########################################################
@@ -495,3 +509,36 @@ class QuestionUpdateView(UpdateView):
     template_name = 'sel4c/questions/create-edit.html'
     fields = '__all__'
     success_url = '/questions'
+
+import csv
+import codecs
+from django.http import HttpResponse
+
+def csv_all_entrepreneurs_answers(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="all_entrepreneurs_answers.csv"'
+
+    writer = csv.writer(codecs.getwriter('utf-8')(response))
+    writer.writerow(['Activity', 'Question', 'Entrepreneur', 'Answer'])
+
+    answers = models.Answer.objects.all()
+    for answer in answers:
+        writer.writerow([answer.activity,answer.question, answer.entrepreneur, answer.answer])
+
+    return response
+
+
+def csv_one_entrepreneur_answers(request, id):
+    entrepreneur = models.Entrepreneur.objects.filter(id=id).first()
+    
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = f'attachment; filename="{entrepreneur}_answers.csv"'
+
+    writer = csv.writer(codecs.getwriter('utf-8')(response))
+    writer.writerow(['Activity','Question', 'Answer'])
+
+    answers = models.Answer.objects.filter(entrepreneur_id=id)
+    for answer in answers:
+        writer.writerow([answer.activity,answer.question, answer.answer])
+
+    return response

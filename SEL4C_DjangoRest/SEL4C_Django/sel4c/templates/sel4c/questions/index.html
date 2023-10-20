@@ -15,7 +15,6 @@
             <table class="datatablesSimple">
                 <thead>
                     <tr>
-                        <th>Actividad</th>
                         <th>Número</th>
                         <th>Pregunta</th>
                         <th>Acciones</th>
@@ -23,7 +22,6 @@
                 </thead>
                 <tfoot>
                     <tr>
-                        <th>Actividad</th>
                         <th>Número</th>
                         <th>Pregunta</th>
                         <th>Acciones</th>
@@ -32,7 +30,6 @@
                 <tbody>
                     {% for question in questions %}
                     <tr>
-                        <td>{{ question.activity }}</td>
                         <td>{{ question.question_num }}</td>
                         <td>{{ question.description }}</td>
                         <td>
