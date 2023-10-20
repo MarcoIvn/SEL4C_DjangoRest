@@ -519,11 +519,11 @@ def csv_all_entrepreneurs_answers(request):
     response['Content-Disposition'] = 'attachment; filename="all_entrepreneurs_answers.csv"'
 
     writer = csv.writer(codecs.getwriter('utf-8')(response))
-    writer.writerow(['Activity', 'Question', 'Entrepreneur', 'Answer'])
+    writer.writerow(['Actividad', 'Pregunta', 'Emprendedor', 'E-mail', 'Respuesta'])
 
     answers = models.Answer.objects.all()
     for answer in answers:
-        writer.writerow([answer.activity,answer.question, answer.entrepreneur, answer.answer])
+        writer.writerow([answer.activity, answer.question, answer.entrepreneur, answer.entrepreneur.email, answer.answer])
 
     return response
 
@@ -535,10 +535,25 @@ def csv_one_entrepreneur_answers(request, id):
     response['Content-Disposition'] = f'attachment; filename="{entrepreneur}_answers.csv"'
 
     writer = csv.writer(codecs.getwriter('utf-8')(response))
-    writer.writerow(['Activity','Question', 'Answer'])
+    writer.writerow(['Actividad','Pregunta', 'Respuesta'])
 
     answers = models.Answer.objects.filter(entrepreneur_id=id)
     for answer in answers:
         writer.writerow([answer.activity,answer.question, answer.answer])
+
+    return response
+
+def csv_one_entrepreneur_act_answers(request, id, activity):
+    entrepreneur = models.Entrepreneur.objects.filter(id=id).first()
+    
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = f'attachment; filename="{entrepreneur}_Act{activity}_answers.csv"'
+
+    writer = csv.writer(codecs.getwriter('utf-8')(response))
+    writer.writerow(['Pregunta', 'Respuesta'])
+
+    answers = models.Answer.objects.filter(entrepreneur_id=id, activity=activity)
+    for answer in answers:
+        writer.writerow([answer.question, answer.answer])
 
     return response
