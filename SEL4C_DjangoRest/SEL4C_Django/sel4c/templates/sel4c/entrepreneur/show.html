@@ -84,10 +84,7 @@
                     </div>
                 </div>
             </div>
-            <div>
-                <canvas id="radarChart1" width="1" height="1" data-profile_results1="{{ profile_results_activity1|safe }}" data-profile_results2="{{ profile_results_activity7|safe }}"></canvas>
-                <canvas id="radarChart2" width="1" height="1" data-ecomplexity_results1="{{ ecomplexity_results_activity1|safe }}" data-ecomplexity_results2="{{ ecomplexity_results_activity7|safe }}"></canvas>
-            </div>
+            
 
             <div>
                 {% for activity, questions_with_answers, files in activity_answers_files %}
@@ -99,7 +96,6 @@
                               <i class="fas fa-download"></i>
                             </a>
                             Actividad {{ activity.activity.activity_num }}
-                            
                     </div>
                     <div class="card-body">
                         <table class="datatablesSimple">
